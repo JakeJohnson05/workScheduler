@@ -1,0 +1,57 @@
+:root {
+	--green-bg: #40c945;
+	--gray-bg: #f1f1f1;
+}
+
+body, html {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	min-height: 90vh;
+    overflow-x: hidden;
+    margin: 0;
+	font-family: Verdana, Verdana, Geneva, sans-serif;
+	font-variant: small-caps;
+}
+
+#banner {
+	width: 100%;
+	height: 90px;
+	background-color: var(--green-bg);
+	color: white;
+	font-size: 50px;
+	padding-top: 20px;
+	padding-left: 20px;
+	letter-spacing: 2px;
+	word-spacing: 10px;
+	min-width: max-content;
+}
+
+#main-content {
+	display: grid;
+	grid-template-columns: 1fr;
+	justify-items: center;
+	margin-top: 100px;
+}
+
+a {
+	text-decoration: none;
+}
+
+#start-button {
+	height: 50px;
+	width: 200px;
+	min-width: max-content;
+	background-color: var(--green-bg);
+	border-radius: 10px;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+	margin-top: 40px;
+	padding-top: 30px;
+}
+
+#start-button:active {
+	height: 47px;
+	border: 3px inset var(--gray-bg);
+}

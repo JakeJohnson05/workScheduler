@@ -1,0 +1,23 @@
+{
+  "name": "expressscheduler",
+  "version": "1.0.0",
+  "description": "Creates a work schedule",
+  "main": "myapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakeJohnson05/workScheduler.git"
+  },
+  "author": "Jake Johnson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JakeJohnson05/workScheduler/issues"
+  },
+  "homepage": "https://github.com/JakeJohnson05/workScheduler#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "materialize-css": "^1.0.0-rc.2"
+  }
+}
