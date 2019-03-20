@@ -7,6 +7,7 @@ var calendarData = {
 	'shifts': [],
 }
 var employeeCopy;
+var shiftCopy;
 
 let createYearOptions = function(currentYear) {
 	let selectNode = document.getElementsByClassName('tab0 year input-field')[0].getElementsByClassName('data')[0];
@@ -108,7 +109,6 @@ let consoleData = function(tab) {
 	}
 
 	//tab2
-
 	console.log(calendarData);
 }
 
@@ -128,6 +128,8 @@ let setUpCurrentTab = function() {
 			employeeCopy = document.getElementsByClassName('employee')[0].cloneNode(true);
 			break;
 		case 2:
+			shiftCopy = document.getElementsByClassName('shift')[0].cloneNode(true);
+			createShiftTimeSlider(document.getElementsByClassName('shift')[0]);
 			break;
 		case 3:
 			break;
@@ -143,6 +145,11 @@ let deleteNode = function(node) {
 	node.parentNode.removeChild(node);
 }
 
+let editRestrictView = function(restrNode) {
+	let restrList = restrNode.getElementsByClassName('restriction-list')[0];
+	restrList.hidden = (restrList.hidden) ? false:true;
+}
+
 let addEmployee = function() {
 	let employeeListDiv = document.getElementsByClassName('employee-list')[0];
 	let newEmployee = employeeCopy.cloneNode(true);
@@ -156,7 +163,51 @@ let deleteEmployee = function(employee) {
 	}
 }
 
-let editRestrictView = function(restrNode) {
-	let restrList = restrNode.getElementsByClassName('restriction-list')[0];
-	restrList.hidden = (restrList.hidden) ? false:true;
+let addShift = function() {
+	let shiftListDiv = document.getElementsByClassName('shift-list')[0];
+	let newShift = shiftCopy.cloneNode(true);
+	createShiftTimeSlider(newShift);
+	shiftListDiv.insertBefore(newShift, shiftListDiv.getElementsByClassName('new-shift-btn')[0]);
+		
 }
+
+let deleteShift = function(shift) {
+	deleteNode(shift);
+	if (document.getElementsByClassName('shift').length < 1) {
+		addShift();
+	}
+}
+
+let createShiftTimeSlider = function(shift) {
+	let sliderDiv = shift.getElementsByClassName('shift-time-slider')[0];
+	
+	noUiSlider.create(sliderDiv, {
+		range: {
+			'min': 0,
+			'max': 1440,
+		},
+		step: 5,
+		start: [540, 1020],
+		connect: true,
+		margin: 90,
+		behaviour: 'tap-drag',
+	});
+
+	let valueDisplays = [
+		sliderDiv.parentNode.getElementsByClassName('shift-time-start')[0],
+		sliderDiv.parentNode.getElementsByClassName('shift-time-end')[0],
+	];
+
+	sliderDiv.noUiSlider.on('update', (values, handle) => {
+		valueDisplays[handle].setAttribute('value', Math.floor(values[handle]));
+		valueDisplays[handle].innerHTML = prettyPrintTime(values[handle]);
+	});
+}
+
+let prettyPrintTime = minutes => {
+	let addZeros = value => Number(value) < 10 ? '0' + Number(value) : Number(value);
+	let hrs = Math.floor(Number(minutes) / 60);
+	let minRemain = Math.floor(Number(minutes)) % 60;
+	return `${addZeros(hrs)}:${addZeros(minRemain)}`
+}
+

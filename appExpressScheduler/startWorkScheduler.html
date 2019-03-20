@@ -2,9 +2,11 @@
 <html lang='en'>
 <head>
 	<title>Work Scheduler</title>
+	<link rel="stylesheet" type="text/css" href="css/nouislider.min.css">
 	<link rel="stylesheet" type="text/css" href="css/startWorkScheduler.css">
 	<script type="text/javascript" src="js/employee.js"></script>
 	<script type="text/javascript" src="js/startWorkScheduler.js"></script>
+	<script type="text/javascript" src="js/nouislider.min.js"></script>
 	<script type="text/javascript">window.onload=()=>{setTab(2);let dateObj=new Date();document.getElementsByClassName("data")[0].getElementsByTagName('option')[((dateObj.getMonth()<11)?dateObj.getMonth()+1:1)+1].selected=true;createYearOptions(new Date().getFullYear());};</script>
 </head>
 <body>
@@ -110,11 +112,19 @@
 				<div class="tab-content tab2">
 					<div class="shift-list">
 						<div class="shift">
-							<div class="delete-button">
+							<div class="shift-time">
+								<div class="shift-time-start shift-time-display" style="text-align:right;">09:00</div>
+								<div style="text-align:center">-></div>
+								<div class="shift-time-end shift-time-display" style="text-align:left">17:00</div>
+								<div class="shift-time-slider" style="grid-column: 1 / 4; width:370px;"></div>
+							</div>
+							<div class="shift-days">
+							</div>
+							<div class="delete-button" onclick="deleteShift(this.parentNode);">
 								<span>X</span>
 							</div>
 						</div>
-					<div class="new-shift-btn">New Shift</div>
+					<div class="new-shift-btn" onclick="addShift();">New Shift</div>
 					</div>
 				</div>
 			</div>
