@@ -210,4 +210,3 @@ let prettyPrintTime = minutes => {
 	let minRemain = Math.floor(Number(minutes)) % 60;
 	return `${addZeros(hrs)}:${addZeros(minRemain)}`
 }
-

@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="js/employee.js"></script>
 	<script type="text/javascript" src="js/startWorkScheduler.js"></script>
 	<script type="text/javascript" src="js/nouislider.min.js"></script>
-	<script type="text/javascript">window.onload=()=>{setTab(2);let dateObj=new Date();document.getElementsByClassName("data")[0].getElementsByTagName('option')[((dateObj.getMonth()<11)?dateObj.getMonth()+1:1)+1].selected=true;createYearOptions(new Date().getFullYear());};</script>
+	<script type="text/javascript">window.onload=()=>{let dateObj=new Date();document.getElementsByClassName("data")[0].getElementsByTagName('option')[((dateObj.getMonth()<11)?dateObj.getMonth()+1:1)+1].selected=true;createYearOptions(new Date().getFullYear());};</script>
 </head>
 <body>
 	<div class="content">
@@ -51,7 +51,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="tab1" class="form-tab">
+			<div id="tab1" class="form-tab" style="display:none">
 				<div class="tab-title">Create Employees</div>
 				<div class="tab-content tab1">
 					<div class="employee-list">
@@ -107,7 +107,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="tab2" class="form-tab">
+			<div id="tab2" class="form-tab" style="display:none">
 				<div class="tab-title">Create Shifts</div>
 				<div class="tab-content tab2">
 					<div class="shift-list">
@@ -128,7 +128,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="tab3" class="form-tab">
+			<div id="tab3" class="form-tab" style="display:none">
 				<div class="tab-title">Set Conditions</div>
 				<div class="tab-content tab3"></div>
 			</div>
