@@ -172,7 +172,7 @@ input[type="text"] {
 	font-size: 15px;
 }
 
-#tab1 .employee-list {
+#tab1 .employee-list, #tab2 .shift-list {
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-row-gap: 20px;
@@ -357,6 +357,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	border-color: #d3d3d3;
 }
 
+
 #tab2 .shift {
 	display: grid;
 	grid-template-columns: 5fr 4fr 1fr;
@@ -369,6 +370,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	border-radius: 5px;
 	margin-bottom: 10px;
 	align-items: center;
+	align-content: center;
 	justify-items: center;
 }
 
@@ -376,7 +378,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	display: grid;
 	grid-template-columns: 1fr 50px 1fr;
 	grid-column-gap: 10px;
-	grid-row-gap: 10px;
+	grid-row-gap: 16px;
 	justify-content: center;
 	justify-items: center; 
 	width: 400px;
