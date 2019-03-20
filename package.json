@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/JakeJohnson05/workScheduler#readme",
   "dependencies": {
-    "express": "^4.16.4",
-    "materialize-css": "^1.0.0-rc.2"
+    "express": "^4.16.4"
   }
 }
