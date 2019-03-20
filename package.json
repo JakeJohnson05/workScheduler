@@ -4,6 +4,7 @@
   "description": "Creates a work schedule",
   "main": "myapp.js",
   "scripts": {
+    "start": "node myapp.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,10 +20,5 @@
   "dependencies": {
     "express": "^4.16.4",
     "materialize-css": "^1.0.0-rc.2"
-  },
-  "keywords": [
-    "node",
-    "heroku",
-    "express"
-  ],
+  }
 }

@@ -1,10 +1,8 @@
 const express = require(`express`);
-const app = express();
-const port = 3000;
+const APP = express();
+const PORT = process.env.PORT || 5000;
 
-app.use(express.static(`appExpressScheduler`));
-// app.use(express.static(`node_modules/materialize-css`));
-app.get(`/`, (req, res) => res.sendFile(`home.html`, {root: __dirname+`/appExpressScheduler`}));
+APP.use(express.static(`appExpressScheduler`));
+APP.get(`/`, (req, res) => res.sendFile(`home.html`, {root: __dirname+`/appExpressScheduler`}));
 
-
-app.listen(port, () => console.log(`expressScheduler active on port ${port}`));
+APP.listen(PORT, () => console.log(`expressScheduler active on port ${ PORT }`));
