@@ -172,30 +172,6 @@ input[type="text"] {
 	font-size: 15px;
 }
 
-/*.tab0.input-field > .select-wrapper {
-	margin-top: 15px;
-}
-
-#tab0 .dropdown-content.select-dropdown {
-	max-height: 70vh;
-	margin-top: 20px;
-
-}
-
-input.select-dropdown.dropdown-trigger {
-	color: #666;
-}
-
-#tab0 input.select-dropdown.dropdown-trigger {
-	font-family: inherit;
-	font-variant: inherit;
-	padding-left: 20px;
-}
-
-.select-wrapper .caret {
-	fill: var(--green-bg);
-}*/
-
 #tab1 .employee-list {
 	display: grid;
 	grid-template-columns: 1fr;
@@ -218,7 +194,6 @@ input.select-dropdown.dropdown-trigger {
 	padding: 10px 20px 10px 20px;
 	height: 90px;
 }
-
 
 #tab1 label {
 	color: var(--green-bg);
@@ -360,7 +335,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	background-color: #d3d3d3;
 }
 
-.new-employee-btn {
+.new-employee-btn, .new-shift-btn {
 	width: 100%;
 	height: 50px;
 	text-align: center;
@@ -374,7 +349,25 @@ input[type="range"]:active, input[type="range"]:hover {
 	transition: all .2s;
 }
 
-.new-employee-btn:hover {
+.new-employee-btn:hover, .new-shift-btn:hover {
 	background-color: #ffffff;
 	border-color: #d3d3d3;
+}
+
+#tab2 .shift {
+	display: grid;
+	grid-template-columns: auto auto auto auto;
+	width: 100%;
+	height: 100%;
+	min-height: 80px;
+	background-color: #fff;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	align-items: center;
+}
+
+.restriction-list {
+	height: 35px;
+	padding-top: 5px;
+	text-align: center;
 }

@@ -2,12 +2,10 @@
 <html lang='en'>
 <head>
 	<title>Work Scheduler</title>
-	<!-- <link rel="stylesheet" type="text/css" href="dist/css/materialize.css"  media="screen,projection"/><script type="text/javascript" src="dist/js/materialize.min.js"></script> -->
 	<link rel="stylesheet" type="text/css" href="css/startWorkScheduler.css">
-	<!-- <script type="text/javascript" src="js/employee.js"></script> -->
+	<script type="text/javascript" src="js/employee.js"></script>
 	<script type="text/javascript" src="js/startWorkScheduler.js"></script>
-	<script type="text/javascript">window.onload=()=>{setTab(0);let dateObj=new Date();document.getElementsByClassName("data")[0].getElementsByTagName('option')[((dateObj.getMonth()<11)?dateObj.getMonth()+1:1)+1].selected=true;}
-	</script>
+	<script type="text/javascript">window.onload=()=>{setTab(2);let dateObj=new Date();document.getElementsByClassName("data")[0].getElementsByTagName('option')[((dateObj.getMonth()<11)?dateObj.getMonth()+1:1)+1].selected=true;createYearOptions(new Date().getFullYear());};</script>
 </head>
 <body>
 	<div class="content">
@@ -45,17 +43,8 @@
 						<label>Year:</label>
 					</div>
 					<div class="tab0 year input-field">
-						<select class="data">
+						<select class="data"">
 							<option value="" disabled>-- Select Year --</option>
-							<option value="2019">2019</option>
-							<option value="2020">2020</option>
-							<option value="2021">2021</option>
-							<option value="2022">2022</option>
-							<option value="2023">2023</option>
-							<option value="2024">2024</option>
-							<option value="2025">2025</option>
-							<option value="2026">2026</option>
-							<option value="2027">2027</option>
 						</select>
 					</div>
 				</div>
@@ -104,10 +93,9 @@
 							</div>
 							<div class="employee-restrictions">
 								<div class="restriction-list" hidden>
-									<div>RESTRICTION</div>
-									<div>RESTRICTION</div>
+									<div>Restrictions not yet setup</div>
 								</div>
-								<div class="open-restrictions-btn" onclick="editRestrict(this.parentNode);">
+								<div class="open-restrictions-btn" onclick="editRestrictView(this.parentNode);">
 									<div style="font-size:13px;">restrictions</div>
 									<div>&#8691;</div>
 								</div>
@@ -119,7 +107,16 @@
 			</div>
 			<div id="tab2" class="form-tab">
 				<div class="tab-title">Create Shifts</div>
-				<div class="tab-content tab2"></div>
+				<div class="tab-content tab2">
+					<div class="shift-list">
+						<div class="shift">
+							<div class="delete-button">
+								<span>X</span>
+							</div>
+						</div>
+					<div class="new-shift-btn">New Shift</div>
+					</div>
+				</div>
 			</div>
 			<div id="tab3" class="form-tab">
 				<div class="tab-title">Set Conditions</div>

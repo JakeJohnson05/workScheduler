@@ -3,10 +3,30 @@ var currentTab = 0;
 var visitedTabs = [false, false, false, false]
 var calendarData = {
 	'date': [],
-	'employeeList': [],
-	'shiftList': [],
+	'employees': [],
+	'shifts': [],
 }
 var employeeCopy;
+
+let createYearOptions = function(currentYear) {
+	let selectNode = document.getElementsByClassName('tab0 year input-field')[0].getElementsByClassName('data')[0];
+	let optionNode;
+	for (let i = 0; i < 5; i++) {
+		optionNode = document.createElement('option');
+		optionNode.value = optionNode.innerHTML = currentYear + i;
+		selectNode.appendChild(optionNode);
+	}
+}
+
+let createYearOptionsOnNode = function(node) {
+	let currentYear = new Date.getFullYear();
+	let optionNode;
+	for (let i = 0; i < 5; i++) {
+		optionNode = document.createElement('option');
+		optionNode.value = optionNode.innerHTML = currentYear + i;
+		node.appendChild(optionNode);
+	}
+}
 
 let setTab = function(tab) {
 	let formTabs = document.getElementsByClassName('form-tab');
@@ -39,6 +59,7 @@ let prevTab = () => setTab((currentTab === 0) ? 0 : currentTab - 1);
 let isTabValid = function () {
 	let tabList = document.getElementsByClassName('form-tab');
 	let requiredList;
+
 	switch(currentTab) {
 		case 0:
 			return true;
@@ -46,8 +67,9 @@ let isTabValid = function () {
 		case 1:
 			requiredList = tabList[1].getElementsByClassName('validate');
 			let valid = true;
+			let nameField;
 			for (let i = 0; i < requiredList.length; i++) {
-				let nameField = requiredList[i];
+				nameField = requiredList[i];
 				if (nameField.value.trim() === '') {
 					nameField.classList.add('invalid');
 					valid = false;
@@ -65,17 +87,29 @@ let isTabValid = function () {
 
 let consoleData = function(tab) {
 	let tabList = document.getElementsByClassName('form-tab');
+	calendarData = {
+		'date': [],
+		'employees': [],
+		'shifts': [],
+	}
 	// Tab 0
 	let selectList = tabList[0].getElementsByTagName('select');
-	console.log('Month:', selectList[0].value, 'Year: ', selectList[1].value);
+	calendarData['date'] = {
+		'month': selectList[0].value,
+		'year': selectList[1].value,
+	}
+
 	//tab1
 	let employeeList = tabList[1].getElementsByClassName('employee');
-	console.log('employeeList:')
+	let empoyeeData;
 	for (let i = 0; i < employeeList.length; i++) {
-		let employeeData = employeeList[i].getElementsByClassName('data');
-		Array.from(employeeData).forEach((value) => console.log(value.value));
+		employeeData = employeeList[i].getElementsByClassName('data');
+		calendarData['employees'].push(Employee.listToEmployee.apply(this, employeeData));
 	}
+
 	//tab2
+
+	console.log(calendarData);
 }
 
 let fixProgressBar = function() {
@@ -122,7 +156,7 @@ let deleteEmployee = function(employee) {
 	}
 }
 
-let editRestrict = function(restrNode) {
+let editRestrictView = function(restrNode) {
 	let restrList = restrNode.getElementsByClassName('restriction-list')[0];
-	restrList.hidden = (restrList.hidden === true) ? false:true;
+	restrList.hidden = (restrList.hidden) ? false:true;
 }
