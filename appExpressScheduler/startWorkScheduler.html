@@ -64,8 +64,8 @@
 								</div>
 								<div class="type input-field" style="max-width:260px; min-width:170px;">
 									<label>classification:</label>
-									<select class="data">
-										<option value="0">General</option>
+									<select class="data classif-select">
+										<option value="0">Associate</option>
 										<option value="1">Owner</option>
 										<option value="2">Manager</option>
 										<option value="3">Supervisor</option>
@@ -86,8 +86,8 @@
 									<div>
 										<span style="font-size:0.9rem; padding-top:5px;">40</span>
 									</div>
-									<div class="range-field" style="grid-column:1/3;">
-										<input type="range" class="data" min="0" max="61" oninput="updateSlider(this);" />
+									<div class="range-field" style="grid-column:1 / 3;">
+										<input type="range" class="data" min="0" max="61" value="40" oninput="updateSlider(this);" />
 									</div>
 								</div>
 								<div class="delete delete-button no-select" onclick="deleteEmployee(this.parentNode.parentNode);"></div>
@@ -111,57 +111,99 @@
 				<div class="tab-content tab2">
 					<div class="shift-list">
 						<div class="shift">
-							<div class="shift-time">
-								<span class="shift-title">Start & End Time:</span>
-								<div style="display:grid; grid-template-columns: 125px 25px 110px; height:30px; margin-bottom:10px; justify-items: center;">
-									<div class="shift-time-start data" style="text-align:right; padding-right:10px; width:110px" value="540"></div>
-									<div style="text-align:right" class="no-select">&rarr;</div>
-									<div class="shift-time-end data" style="width:110px; text-align:right; padding-right:10px;" value="1020"></div>
+							<div class="shift-main">
+								<div class="shift-time">
+									<span class="shift-title">Start & End Time:</span>
+									<div style="display:grid; grid-template-columns: 125px 25px 110px; height:30px; margin-bottom:10px; justify-items: center;">
+										<div class="shift-time-start data" style="text-align:right; padding-right:10px; width:110px" value="540"></div>
+										<div style="text-align:right" class="no-select">&rarr;</div>
+										<div class="shift-time-end data" style="width:110px; text-align:right; padding-right:10px;" value="1020"></div>
+									</div>
+									<div class="shift-time-slider" style="width:300px; height:10px;cursor:initial"></div>
 								</div>
-								<div class="shift-time-slider" style="width:300px; height:10px;cursor:initial"></div>
-							</div>
-							<div class="shift-number-employees">
-								<div class="shift-title" style="grid-column: 1 / 4;">Number of Employees:</div>
-								<div class="number data" value="1">01</div>
-								<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'u');">&and;</div>
-								<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'd');">&or;</div>
-							</div>
-							<div class="shift-days">
-								<div class="shift-title" style="width:400px;">Days of Week:</div>
-								<div class="top-days">
-									<label class="checkbox-container">Sunday
-										<input type="checkbox" class="data"/>
-										<span class="checkmark"></span>
-									</label>
-									<label class="checkbox-container">Monday
-										<input type="checkbox" class="data" checked="checked"/>
-										<span class="checkmark"></span>
-									</label>
-									<label class="checkbox-container">Tuesday
-										<input type="checkbox" class="data" checked="checked"/>
-										<span class="checkmark"></span>
-									</label>
-									<label class="checkbox-container">Wednesday
-										<input type="checkbox" class="data" checked="checked"/>
-										<span class="checkmark"></span>
-									</label>
+								<div class="shift-number-employees">
+									<div class="shift-title" style="grid-column: 1 / 4;">Number of Employees:</div>
+									<div class="number data" value="1">01</div>
+									<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'u', 99);">&and;</div>
+									<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'd', 99);">&or;</div>
 								</div>
-								<div class="bottom-days">
-									<label class="checkbox-container">Thursday
-										<input type="checkbox" class="data" checked="checked"/>
-										<span class="checkmark"></span>
-									</label>
-									<label class="checkbox-container">Friday
-										<input type="checkbox" class="data" checked="checked"/>
-										<span class="checkmark"></span>
-									</label>
-									<label class="checkbox-container">Saturday
-										<input type="checkbox" class="data"/> 
-										<span class="checkmark"></span>
-									</label>
+								<div class="shift-days">
+									<div class="shift-title" style="width:400px;">Days of Week:</div>
+									<div class="top-days">
+										<label class="checkbox-container">Sunday
+											<input type="checkbox" class="data"/>
+											<span class="checkmark"></span>
+										</label>
+										<label class="checkbox-container">Monday
+											<input type="checkbox" class="data" checked="checked"/>
+											<span class="checkmark"></span>
+										</label>
+										<label class="checkbox-container">Tuesday
+											<input type="checkbox" class="data" checked="checked"/>
+											<span class="checkmark"></span>
+										</label>
+										<label class="checkbox-container">Wednesday
+											<input type="checkbox" class="data" checked="checked"/>
+											<span class="checkmark"></span>
+										</label>
+									</div>
+									<div class="bottom-days">
+										<label class="checkbox-container">Thursday
+											<input type="checkbox" class="data" checked="checked"/>
+											<span class="checkmark"></span>
+										</label>
+										<label class="checkbox-container">Friday
+											<input type="checkbox" class="data" checked="checked"/>
+											<span class="checkmark"></span>
+										</label>
+										<label class="checkbox-container">Saturday
+											<input type="checkbox" class="data"/> 
+											<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+								<div class="delete-button no-select" onclick="deleteShift(this.parentNode.parentNode);"></div>
+							</div>
+							<div class="shift-restrictions">
+								<div class="restriction-list" hidden>
+									<div class="shift-restriction">
+										<select class="data classif-select" oninput="updateRestrDescrip(this.parentNode);">
+											<option value="0" selected>At Least</option>
+											<option value="1">Only</option>
+											<option value="2">At Most</option>
+										</select>
+										<div class="shift-number-employees">
+											<div class="number data" value="1">01</div>
+											<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'u', this.parentNode.parentNode.parentNode.parentNode.parentNode.getElementsByClassName('data number')[0].getAttribute('value'));updateRestrDescrip(this.parentNode.parentNode);">&and;</div>
+											<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'd', this.parentNode.parentNode.parentNode.parentNode.parentNode.getElementsByClassName('data number')[0].getAttribute('value'));updateRestrDescrip(this.parentNode.parentNode);">&or;</div>
+										</div>
+										<select class="data classif-select" oninput="updateRestrDescrip(this.parentNode);">
+											<option value="0">Associate</option>
+											<option value="1">Owner</option>
+											<option value="2">Manager</option>
+											<option value="3">Supervisor</option>
+											<option value="4">New Hire</option>
+											<option value="5">Assistant</option>
+											<option value="6">Clerk</option>
+											<option value="7">Receptionist</option>
+											<option value="8">Coordinator</option>
+											<option value="9">Administrator</option>
+											<option value="10">President</option>
+											<option value="11">Specialist</option>
+										</select>
+										<div class="restriction-description">
+											<div>There will be at least 1 associate</div>
+											<div>on this shift</div>
+										</div>
+										<div class="delete-button no-select" onclick="deleteShiftRestriction(this.parentNode);"></div>
+									</div>
+									<div class="new-restriction-btn" onclick="addShiftRestriction(this.parentNode);">Create New Restriction</div>
+								</div>
+								<div class="open-restrictions-btn" onclick="editRestrictView(this.parentNode);">
+									<div style="font-size:13px;">conditions</div>
+									<div>&#8691;</div>
 								</div>
 							</div>
-							<div class="delete-button no-select" onclick="deleteShift(this.parentNode);"></div>
 						</div>
 					<div class="new-shift-btn" onclick="addShift();">New Shift</div>
 					</div>

@@ -8,6 +8,22 @@ var calendarData = {
 }
 var employeeCopy;
 var shiftCopy;
+var shiftRestrictionCopy;
+let classifList = [
+	'Associate',
+	'Owner',
+	'Manager',
+	'Supervisor',
+	'New Hire',
+	'Assistant',
+	'Clerk',
+	'Receptionist',
+	'Coordinator',
+	'Administrator',
+	'President',
+	'Specialist',
+]
+
 
 let createYearOptions = function(currentYear) {
 	let selectNode = document.getElementsByClassName('tab0 year input-field')[0].getElementsByClassName('data')[0];
@@ -152,6 +168,8 @@ let setUpCurrentTab = function() {
 			employeeCopy = document.getElementsByClassName('employee')[0].cloneNode(true);
 			break;
 		case 2:
+			shiftRestrictionCopy = document.getElementsByClassName('shift')[0].getElementsByClassName('shift-restriction')[0].cloneNode(true);
+			deleteNode(document.getElementsByClassName('shift')[0].getElementsByClassName('shift-restriction')[0]);
 			shiftCopy = document.getElementsByClassName('shift')[0].cloneNode(true);
 			createShiftTimeSlider(document.getElementsByClassName('shift')[0]);
 			break;
@@ -165,26 +183,21 @@ let updateSlider = function(slider) {
 	slider.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('span')[0].innerHTML = value;
 }
 
-let deleteNode = function(node) {
-	node.parentNode.removeChild(node);
-}
+let deleteNode = node => node.parentNode.removeChild(node);
 
 let editRestrictView = function(restrNode) {
 	let restrList = restrNode.getElementsByClassName('restriction-list')[0];
-	restrList.hidden = (restrList.hidden) ? false:true;
+	restrList.hidden = !(restrList.hidden);
 }
 
 let addEmployee = function() {
 	let employeeListDiv = document.getElementsByClassName('employee-list')[0];
-	let newEmployee = employeeCopy.cloneNode(true);
-	employeeListDiv.insertBefore(newEmployee, employeeListDiv.getElementsByClassName('new-employee-btn')[0]);
+	employeeListDiv.insertBefore(employeeCopy.cloneNode(true), employeeListDiv.getElementsByClassName('new-employee-btn')[0]);
 }
 
 let deleteEmployee = function(employee) {
 	deleteNode(employee);
-	if (document.getElementsByClassName('employee').length < 1) {
-		addEmployee();
-	}
+	if (document.getElementsByClassName('employee').length < 1) addEmployee();
 }
 
 let addShift = function() {
@@ -192,19 +205,15 @@ let addShift = function() {
 	let newShift = shiftCopy.cloneNode(true);
 	createShiftTimeSlider(newShift);
 	shiftListDiv.insertBefore(newShift, shiftListDiv.getElementsByClassName('new-shift-btn')[0]);
-		
 }
 
 let deleteShift = function(shift) {
 	deleteNode(shift);
-	if (document.getElementsByClassName('shift').length < 1) {
-		addShift();
-	}
+	if (document.getElementsByClassName('shift').length < 1) addShift();
 }
 
 let createShiftTimeSlider = function(shift) {
 	let sliderDiv = shift.getElementsByClassName('shift-time-slider')[0];
-	
 	noUiSlider.create(sliderDiv, {
 		range: {
 			'min': 0,
@@ -228,7 +237,6 @@ let createShiftTimeSlider = function(shift) {
 	});
 }
 
-
 let addZeros = value => Number(value) < 10 ? '0' + Number(value) : Number(value);
 
 let prettyPrintTime = function(minutes) {
@@ -236,20 +244,35 @@ let prettyPrintTime = function(minutes) {
 	let minRemain = Math.floor(Number(minutes)) % 60;
 
 	let amORpm = value => hrs < 12 ? 'am':'pm';
-
 	let hrs12 = (amORpm(hrs) === 'am' ) ? hrs:(hrs-12)
+
 	return `${ hrs12 === 0 ? 12:hrs12 }:${ addZeros(minRemain) } ${ amORpm(hrs) }`
 }
 
-let ChngNumEmp = function(shiftNumNode, direction) {
+let ChngNumEmp = function(shiftNumNode, direction, max) {
 	numDiv = shiftNumNode.getElementsByClassName('number data')[0];
 	let newVal = Number(numDiv.getAttribute('value')) + (direction === 'u' ? 1 : -1);
-	if (newVal > 99) {
-		newVal = 99;
-	} else if (newVal < 1) {
-		newVal = 1;
-	}
+
+	if (newVal > 99) { newVal = 99;
+	} else if (newVal > Number(max)) { newVal = Number(max);
+	} else if (newVal < 1) { newVal = 1; }
 
 	numDiv.setAttribute('value', newVal);
 	numDiv.innerHTML = addZeros(newVal);
+}
+
+let addShiftRestriction = restrictionList => restrictionList.insertBefore(shiftRestrictionCopy.cloneNode(true), restrictionList.getElementsByClassName('new-restriction-btn')[0]);
+let deleteShiftRestriction = restrictionNode => deleteNode(restrictionNode);
+
+let updateRestrDescrip = function(node) {
+	let desc = node.getElementsByClassName('restriction-description')[0];
+	let dataValues = node.getElementsByClassName('data');
+
+	let options = ['at least', 'only', 'at most'];
+	let txt = `<div>
+	There will be ${ options[dataValues[0].value] } ${ dataValues[1].getAttribute('value') } 
+	${ classifList[dataValues[2].value].toLowerCase() }${ Number(dataValues[1].getAttribute('value')) > 1 ? 's':'' }
+	</div><div>on this shift</div>`;
+
+	desc.innerHTML = txt;
 }
