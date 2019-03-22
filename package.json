@@ -19,6 +19,8 @@
   "homepage": "https://github.com/JakeJohnson05/workScheduler#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "nouislider": "^13.1.4"
+    "express-favicon": "^2.0.1",
+    "nouislider": "^13.1.4",
+    "serve-favicon": "^2.5.0"
   }
 }
