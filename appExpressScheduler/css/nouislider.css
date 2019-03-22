@@ -146,7 +146,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   position: absolute;
   height: 14px;
   width: 1px;
-  background: #E8E7E6;
+  background: #888;
   left: 14px;
   top: 6px;
 }

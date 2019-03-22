@@ -1,8 +1,8 @@
 class Employee {
 	constructor(name, classification, maxHours, restrictions) {
 		this._empName = name;
-		this._empClass = classification;
-		this._empMaxHrs = maxHours;
+		this._empClass = Number(classification);
+		this._empMaxHrs = Number(maxHours);
 		this._empRestr = (restrictions) ? restrictions:null;
 		this._empCurrentHrs = 0;
 	}

@@ -96,8 +96,8 @@ let consoleData = function(tab) {
 	// Tab 0
 	let selectList = tabList[0].getElementsByTagName('select');
 	calendarData['date'] = {
-		'month': selectList[0].value,
-		'year': selectList[1].value,
+		'month': Number(selectList[0].value),
+		'year': Number(selectList[1].value),
 	}
 
 	//tab1
@@ -107,8 +107,32 @@ let consoleData = function(tab) {
 		employeeData = employeeList[i].getElementsByClassName('data');
 		calendarData['employees'].push(Employee.listToEmployee.apply(this, employeeData));
 	}
+	/**
+	* -------------------- Just for Testing --------------------
+	*/
+	if (calendarData['employees'][0].name === "") calendarData['employees'] = [new Employee('Jake', '0', '40')];
+	/**
+	* ----------------------------------------------------------
+	*/
 
 	//tab2
+	let shiftList = tabList[2].getElementsByClassName('shift');
+	let shiftData;
+	let getV = node => node.getAttribute('value');
+	for (let i = 0; i < shiftList.length; i++) {
+		let shiftData = shiftList[i].getElementsByClassName('data');
+		let days = {
+			'sun': shiftData[3].checked,
+			'mon': shiftData[4].checked,
+			'tue': shiftData[5].checked,
+			'wed': shiftData[6].checked,
+			'thu': shiftData[7].checked,
+			'fri': shiftData[8].checked,
+			'sat': shiftData[9].checked,
+		}
+		calendarData['shifts'].push(new Shift(getV(shiftData[0]), getV(shiftData[1]), getV(shiftData[2]), days));
+	}
+
 	console.log(calendarData);
 }
 
@@ -186,7 +210,7 @@ let createShiftTimeSlider = function(shift) {
 			'min': 0,
 			'max': 1440,
 		},
-		step: 5,
+		step: 10,
 		start: [540, 1020],
 		connect: true,
 		margin: 90,
@@ -204,9 +228,28 @@ let createShiftTimeSlider = function(shift) {
 	});
 }
 
-let prettyPrintTime = minutes => {
-	let addZeros = value => Number(value) < 10 ? '0' + Number(value) : Number(value);
+
+let addZeros = value => Number(value) < 10 ? '0' + Number(value) : Number(value);
+
+let prettyPrintTime = function(minutes) {
 	let hrs = Math.floor(Number(minutes) / 60);
 	let minRemain = Math.floor(Number(minutes)) % 60;
-	return `${addZeros(hrs)}:${addZeros(minRemain)}`
+
+	let amORpm = value => hrs < 12 ? 'am':'pm';
+
+	let hrs12 = (amORpm(hrs) === 'am' ) ? hrs:(hrs-12)
+	return `${ hrs12 === 0 ? 12:hrs12 }:${ addZeros(minRemain) } ${ amORpm(hrs) }`
+}
+
+let ChngNumEmp = function(shiftNumNode, direction) {
+	numDiv = shiftNumNode.getElementsByClassName('number data')[0];
+	let newVal = Number(numDiv.getAttribute('value')) + (direction === 'u' ? 1 : -1);
+	if (newVal > 99) {
+		newVal = 99;
+	} else if (newVal < 1) {
+		newVal = 1;
+	}
+
+	numDiv.setAttribute('value', newVal);
+	numDiv.innerHTML = addZeros(newVal);
 }
