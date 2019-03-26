@@ -4,7 +4,11 @@ class Employee {
 		this._empClass = Number(classification);
 		this._empMaxHrs = Number(maxHours);
 		this._empRestr = (restrictions) ? restrictions:null;
-		this._empCurrentHrs = 0;
+		this._shifts = {};
+	}
+
+	static listToEmployee (name, classification, maxHours, restrictions) {
+		return new Employee(name.value, classification.value, maxHours.value, restrictions);
 	}
 
 	get name () {
@@ -22,18 +26,12 @@ class Employee {
 	get restr () {
 		return this._restrictions;
 	}
-	get hrs () {
-		return this._empCurrentHrs;
+
+	deleteAllShifts() {
+		this._shifts = {};
 	}
 
-	addHrs (hrs) {
-		this._empCurrentHrs += hrs;
-	}
-	resetHrs () {
-		this._empCurrentHrs = 0;
-	}
-
-	static listToEmployee (name, classification, maxHours, restrictions) {
-		return new Employee(name.value, classification.value, maxHours.value, restrictions);
+	addShift(day, shift) {
+		this._shifts['day'] = shift;
 	}
 }

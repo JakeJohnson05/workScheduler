@@ -1,11 +1,6 @@
 // Global variables
 var currentTab = 0;
 var visitedTabs = [false, false, false, false]
-var calendarData = {
-	'date': [],
-	'employees': [],
-	'shifts': [],
-}
 var employeeCopy;
 var shiftCopy;
 var shiftRestrictionCopy;
@@ -23,11 +18,25 @@ let classifList = [
 	'President',
 	'Specialist',
 ]
-
+let months = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
+];
 
 let createYearOptions = function(currentYear) {
 	let selectNode = document.getElementsByClassName('tab0 year input-field')[0].getElementsByClassName('data')[0];
 	let optionNode;
+
 	for (let i = 0; i < 5; i++) {
 		optionNode = document.createElement('option');
 		optionNode.value = optionNode.innerHTML = currentYear + i;
@@ -54,20 +63,44 @@ let setTab = function(tab) {
 	currentTab = tab;
 	fixProgressBar();
 
+	// set up tab as 'new' if it hasn't been visited
 	if (!visitedTabs[currentTab]) {
 		setUpCurrentTab();
 		visitedTabs[currentTab] = true;
 	}
-	if (currentTab === 0) {
-		document.getElementById('back-button').style.display = 'none';
-	} else {
-		document.getElementById('back-button').style.display = 'block';
+
+	// change navigation buttons and progressbar due to current tab
+	let backBtn = document.getElementById('back-button');
+	let nextBtn = document.getElementById('next-button');
+	let progressBar = document.getElementById('progress-container');
+	switch(currentTab) {
+		case 0:
+			backBtn.style.display = 'none';
+			break;
+		case 4:
+			nextBtn.innerHTML = '<span>submit &raquo;</span>';
+			nextBtn.onclick = () => {
+				nextTab();
+				consoleData();
+			}
+			break;
+		case 5:
+			nextBtn.style.display = 'none';
+			progressBar.style.display = 'none';
+			backBtn.style.display = 'block';
+			break;
+		default:
+			backBtn.style.display = 'block';
+			nextBtn.style.display = 'block';
+			nextBtn.innerHTML = '<span>next &raquo;</span>';
+			progressBar.style.display = 'block';
+			nextBtn.onclick = () => nextTab();
 	}
 }
 
 let nextTab = function() {
 	if (isTabValid()){
-		setTab((currentTab === 3) ? 3 : currentTab + 1);
+		setTab((currentTab === 5) ? 5 : currentTab + 1);
 	}
 }
 
@@ -96,68 +129,14 @@ let isTabValid = function () {
 			}
 			return valid;
 			break;
+		case 2:
+			console.log(`tab 2 has defualted to true\nFIX:\n	Multiple 'at least' restrictions totaling larger than total employees`);
+			return true;
+			break;
 		default:
 			console.log(`tab ${currentTab} has defaulted to true`);
 			return true;
 	}
-}
-
-let consoleData = function(tab) {
-	let tabList = document.getElementsByClassName('form-tab');
-	calendarData = {
-		'date': [],
-		'employees': [],
-		'shifts': [],
-	}
-	// Tab 0
-	let selectList = tabList[0].getElementsByTagName('select');
-	calendarData['date'] = {
-		'month': Number(selectList[0].value),
-		'year': Number(selectList[1].value),
-	}
-
-	//tab1
-	let employeeList = tabList[1].getElementsByClassName('employee');
-	let empoyeeData;
-	for (let i = 0; i < employeeList.length; i++) {
-		employeeData = employeeList[i].getElementsByClassName('data');
-		calendarData['employees'].push(Employee.listToEmployee.apply(this, employeeData));
-	}
-	/**
-	* -------------------- Just for Testing --------------------
-	*/
-	if (calendarData['employees'][0].name === "") calendarData['employees'] = [new Employee('Jake', '0', '40')];
-	/**
-	* ----------------------------------------------------------
-	*/
-
-	//tab2
-	let shiftList = tabList[2].getElementsByClassName('shift');
-	let shiftData;
-	let getV = node => node.getAttribute('value');
-	for (let i = 0; i < shiftList.length; i++) {
-		let shiftData = shiftList[i].getElementsByClassName('data');
-		let days = {
-			'sun': shiftData[3].checked,
-			'mon': shiftData[4].checked,
-			'tue': shiftData[5].checked,
-			'wed': shiftData[6].checked,
-			'thu': shiftData[7].checked,
-			'fri': shiftData[8].checked,
-			'sat': shiftData[9].checked,
-		}
-		calendarData['shifts'].push(new Shift(getV(shiftData[0]), getV(shiftData[1]), getV(shiftData[2]), days));
-	}
-
-	console.log(calendarData);
-}
-
-let fixProgressBar = function() {
-	let barWidths = ['10%', '35%', '60%', '85%'];
-	let barTexts = ['0%', '25%', '50%', '75%'];
-	let progressBar = document.getElementsByClassName('progress-bar')[0];
-	progressBar.style.width = barWidths[currentTab];
-	progressBar.getElementsByTagName('span')[0].innerHTML = barTexts[currentTab];
 }
 
 let setUpCurrentTab = function() {
@@ -174,8 +153,84 @@ let setUpCurrentTab = function() {
 			createShiftTimeSlider(document.getElementsByClassName('shift')[0]);
 			break;
 		case 3:
+			let selects = document.getElementsByClassName('tab-content tab0')[0].getElementsByTagName('select');
+			let titles = document.getElementsByClassName('tab-content tab3')[0].getElementsByClassName('title');
+			titles[0].innerHTML = months[selects[0].value];
+			titles[1].innerHTML = selects[1].value;
+
+			let calContent = document.getElementsByClassName('calendar-content tab3')[0];
+			while(calContent.lastChild) {
+				calContent.removeChild(calContent.lastChild);
+			}
+			generateTab3Cal(Number(selects[0].value), Number(selects[1].value))
 			break;
 	}
+}
+
+let consoleData = function(tab) {
+	let tabList = document.getElementsByClassName('form-tab');
+	let calendarData = {
+		'date': [],
+		'employees': [],
+		'shifts': [],
+		'voidDays': [],
+	}
+
+	// Tab 0
+	let selectList = tabList[0].getElementsByTagName('select');
+	calendarData['date'] = {
+		'month': Number(selectList[0].value),
+		'year': Number(selectList[1].value),
+	}
+
+	//tab1
+	let employeeList = tabList[1].getElementsByClassName('employee');
+	let empoyeeData;
+	for (let i = 0; i < employeeList.length; i++) {
+		employeeData = employeeList[i].getElementsByClassName('data');
+		calendarData['employees'].push(Employee.listToEmployee.apply(this, employeeData));
+	}
+
+	//tab2
+	let shiftList = tabList[2].getElementsByClassName('shift');
+	let shiftData;
+	let getV = node => Number(node.getAttribute('value'));
+
+	for (let i = 0; i < shiftList.length; i++) {
+		let shift = shiftList[i];
+		let shiftData = shift.getElementsByClassName('data');
+		let days = [3,4,5,6,7,8,9].map(i => shiftData[i].checked);
+
+		let reqList = [];
+		let options = ['At Least', 'Only', 'At Most'];
+
+		let shiftRestrictions = shift.getElementsByClassName('shift-restriction');
+		for (let j = 0; j < shiftRestrictions.length; j++) {
+			let restrictionData = shiftRestrictions[j].getElementsByClassName('data');
+			reqList.push([
+				options[Number(restrictionData[0].value)],
+				getV(restrictionData[1]),
+				Number(restrictionData[2].value),
+			]);
+		}
+
+		calendarData['shifts'].push(new Shift(getV(shiftData[0]), getV(shiftData[1]), getV(shiftData[2]), days, reqList));
+	}
+
+	//tab3
+	let voidDays = tabList[3].getElementsByClassName('calendar-content')[0].getElementsByClassName('selected');
+	for (let i = 0; i < voidDays.length; i++) {
+		calendarData['voidDays'].push(Number(voidDays[i].textContent));
+	}
+	generateSchedule(calendarData['date'], calendarData['employees'], calendarData['shifts'], calendarData['voidDays']);
+}
+
+let fixProgressBar = function() {
+	let barWidths = ['10%', '25%', '50%', '70%', '100%'];
+	let barTexts = ['0%', '25%', '50%', '75%', '100%'];
+	let progressBar = document.getElementsByClassName('progress-bar')[0];
+	progressBar.style.width = barWidths[currentTab];
+	progressBar.children[0].innerHTML = barTexts[currentTab];
 }
 
 let updateSlider = function(slider) {
@@ -244,7 +299,7 @@ let prettyPrintTime = function(minutes) {
 	let minRemain = Math.floor(Number(minutes)) % 60;
 
 	let amORpm = value => hrs < 12 ? 'am':'pm';
-	let hrs12 = (amORpm(hrs) === 'am' ) ? hrs:(hrs-12)
+	let hrs12 = (amORpm(hrs) === 'am' ) ? hrs:(hrs-12);
 
 	return `${ hrs12 === 0 ? 12:hrs12 }:${ addZeros(minRemain) } ${ amORpm(hrs) }`
 }
@@ -267,12 +322,45 @@ let deleteShiftRestriction = restrictionNode => deleteNode(restrictionNode);
 let updateRestrDescrip = function(node) {
 	let desc = node.getElementsByClassName('restriction-description')[0];
 	let dataValues = node.getElementsByClassName('data');
-
 	let options = ['at least', 'only', 'at most'];
-	let txt = `<div>
+
+	desc.innerHTML = `<div>
 	There will be ${ options[dataValues[0].value] } ${ dataValues[1].getAttribute('value') } 
 	${ classifList[dataValues[2].value].toLowerCase() }${ Number(dataValues[1].getAttribute('value')) > 1 ? 's':'' }
 	</div><div>on this shift</div>`;
+}
 
-	desc.innerHTML = txt;
+let editRestrMax = function(maxValue, restrictionList){
+	let allRestrs = restrictionList.getElementsByClassName('number data');
+
+	for (let i=0; i < allRestrs.length; i++) {
+		let numberNode = allRestrs[i];
+
+		numberNode.setAttribute('value', (numberNode.getAttribute('value') > maxValue ? maxValue:numberNode.getAttribute('value')));
+		numberNode.innerHTML = addZeros(Number(numberNode.getAttribute('value')));
+
+		updateRestrDescrip(numberNode.parentNode.parentNode);
+	}
+} 
+
+let generateTab3Cal = function(month, year) {
+	let numDaysInMonth = new Date(year, month+1, 0).getDate();
+	let startWeekDay = new Date(year, month, 1).getDay();
+	let calendar = document.getElementsByClassName('calendar-content tab3')[0];
+
+	for (let i=0; i < startWeekDay; i++) {
+		let newDay = document.createElement('div');
+		newDay.classList.add('other-month');
+		calendar.appendChild(newDay);
+	}
+	for(let i=1; i <= numDaysInMonth; i++) {
+		let newDay = document.createElement('div');
+		newDay.innerHTML = i;
+		newDay.setAttribute('onclick', 
+			"if(this.classList.contains('selected')){this.classList.remove('selected')}else{this.classList.add('selected')}");
+		calendar.appendChild(newDay);
+	}
+
+
+
 }

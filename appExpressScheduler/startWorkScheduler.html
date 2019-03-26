@@ -3,13 +3,14 @@
 <head>
 	<title>Work Scheduler</title>
 	<link rel="shortcut icon" href="/favicon_2.ico">
-	<link rel="stylesheet" type="text/css" href="css/nouislider.min.css">
+	<link rel="stylesheet" type="text/css" href="css/nouislider.css">
 	<link rel="stylesheet" type="text/css" href="css/startWorkScheduler.css">
 	<script type="text/javascript" src="js/employee.js"></script>
 	<script type="text/javascript" src="js/shift.js"></script>
+	<script type="text/javascript" src="js/createSchedule.js"></script>
 	<script type="text/javascript" src="js/startWorkScheduler.js"></script>
-	<script type="text/javascript" src="js/nouislider.min.js"></script>
-	<script type="text/javascript">window.onload=()=>{let dateObj=new Date();document.getElementsByClassName("data")[0].getElementsByTagName('option')[((dateObj.getMonth()<11)?dateObj.getMonth()+1:1)+1].selected=true;createYearOptions(new Date().getFullYear());}</script>
+	<script type="text/javascript" src="js/nouislider.js"></script>
+	<script type="text/javascript">window.onload=()=>{let dateObj=new Date();document.getElementsByClassName("data")[0].getElementsByTagName('option')[((dateObj.getMonth()<11)?dateObj.getMonth()+1:1)+1].selected=true;createYearOptions(new Date().getFullYear())}</script>
 </head>
 <body>
 	<div class="content">
@@ -24,35 +25,40 @@
 				<div class="tab-title">Select Month</div>
 				<div class="tab-content tab0">
 					<div>
-						<label>Month:</label>
-					</div>
-					<div class="tab0 month input-field">
-						<select class="data">
-							<option value="" disabled>-- Select Month --</option>
-							<option value="0">January</option>
-							<option value="1">February</option>
-							<option value="2">March</option>
-							<option value="3">April</option>
-							<option value="4">May</option>
-							<option value="5">June</option>
-							<option value="6">July</option>
-							<option value="7">August</option>
-							<option value="8">September</option>
-							<option value="9">October</option>
-							<option value="10">November</option>
-							<option value="11">December</option>
-						</select>
+						<div>
+							<label>Month:</label>
+						</div>
+						<div class="tab0 month input-field">
+							<select class="data" oninput="visitedTabs[3] = false;">
+								<option value="" disabled>-- Select Month --</option>
+								<option value="0">January</option>
+								<option value="1">February</option>
+								<option value="2">March</option>
+								<option value="3">April</option>
+								<option value="4">May</option>
+								<option value="5">June</option>
+								<option value="6">July</option>
+								<option value="7">August</option>
+								<option value="8">September</option>
+								<option value="9">October</option>
+								<option value="10">November</option>
+								<option value="11">December</option>
+							</select>
+						</div>
 					</div>
 					<div>
-						<label>Year:</label>
-					</div>
-					<div class="tab0 year input-field">
-						<select class="data">
-							<option value="" disabled>-- Select Year --</option>
-						</select>
+						<div>
+							<label>Year:</label>
+						</div>
+						<div class="tab0 year input-field">
+							<select class="data" oninput="visitedTabs[3] = false;">
+								<option value="" disabled>-- Select Year --</option>
+							</select>
+						</div>
 					</div>
 				</div>
 			</div>
+
 			<div id="tab1" class="form-tab" style="display:none">
 				<div class="tab-title">Create Employees</div>
 				<div class="tab-content tab1">
@@ -61,7 +67,9 @@
 							<div class="employee-main">
 								<div class="input-field name" style="min-width:245px; max-width:350px">
 									<label>name:</label>
-									<input type="text" class="validate data" maxlength="23"/>
+									<!-- remove name preset value! only for production -->
+									<script type="text/javascript">console.log('remove Employee name preset value!! only for production');</script>
+									<input type="text" class="validate data" maxlength="23" value="John Doe" placeholder="employee name" />
 								</div>
 								<div class="type input-field" style="max-width:260px; min-width:170px;">
 									<label>classification:</label>
@@ -107,6 +115,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div id="tab2" class="form-tab" style="display:none">
 				<div class="tab-title">Create Shifts</div>
 				<div class="tab-content tab2">
@@ -126,7 +135,7 @@
 									<div class="shift-title" style="grid-column: 1 / 4;">Number of Employees:</div>
 									<div class="number data" value="1">01</div>
 									<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'u', 99);">&and;</div>
-									<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'd', 99);">&or;</div>
+									<div class="number-button no-select" onclick="ChngNumEmp(this.parentNode, 'd', 99);editRestrMax(Number(this.parentNode.getElementsByClassName('data number')[0].getAttribute('value')),this.parentNode.parentNode.parentNode.getElementsByClassName('restriction-list')[0]);">&or;</div>
 								</div>
 								<div class="shift-days">
 									<div class="shift-title" style="width:400px;">Days of Week:</div>
@@ -193,7 +202,7 @@
 											<option value="11">Specialist</option>
 										</select>
 										<div class="restriction-description">
-											<div><!-- Place Holder Description -->There will be at least 1 associate</div>
+											<div>There will be at least 1 associate</div>
 											<div>on this shift</div>
 										</div>
 										<div class="delete-button no-select" onclick="deleteShiftRestriction(this.parentNode);"></div>
@@ -210,14 +219,45 @@
 					</div>
 				</div>
 			</div>
+
 			<div id="tab3" class="form-tab" style="display:none">
-				<div class="tab-title">Set Conditions</div>
-				<div class="tab-content tab3"></div>
+				<div class="tab-title">General Restrictions</div>
+				<div class="tab-content tab3">
+					<div class="restriction-title">No Work Days</div>
+					<div class="restriction-description">select days to prevent any scheduling<br/><span style="font-size:90%;"><span style="font-size:90%;font-variant:none;">e.g.,</span> holiday, closed</span></div>
+					<div class="calendar-no-work">
+						<div class="calendar-title">
+							<div class="month title" style="font-size: 150%;"></div>
+							<div class="year title"></div>
+						</div>
+						<div class="weekdays">
+							<div>Sun</div>
+							<div>Mon</div>
+							<div>Tue</div>
+							<div>Wed</div>
+							<div>Thu</div>
+							<div>Fri</div>
+							<div>Sat</div>
+						</div>
+						<div class="calendar-content no-select tab3"></div>
+					</div>
+				</div>
 			</div>
+
+			<div id="tab4" class="form-tab" style="display:none">
+				<div class="tab-title">Confirm Information</div>
+				<div class="tab-content tab4"></div>
+			</div>
+
+			<div id="tab5" class="form-tab" style="display:none">
+				<div class="tab-title">Calendar</div>
+				<div class="tab-content tab5"></div>
+			</div>
+
 		</div>
 		<div id="navigation">
 			<div>
-				<div id="back-button" class="nav-button" onclick="prevTab()">
+				<div id="back-button" class="nav-button" onclick="prevTab()" style="display:none">
 					<span>&laquo; prev</span>
 				</div>
 			</div>
