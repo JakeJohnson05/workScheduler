@@ -73,6 +73,7 @@ a {
 	width: max-content;
 	align-items: center;
 	text-align: center;
+	font-size: 25px;
 }
 
 #header-links div {
@@ -191,7 +192,6 @@ a {
 #back-button:hover > span {
 	padding-right: 15px;
 }
-
 
 .tab-content {
 	min-height: 160px;
@@ -394,33 +394,86 @@ input[type="range"]:active, input[type="range"]:hover {
 	border: 1px solid #d3d3d3;
 	border-top: 2px solid #d3d3d3;
 	border-bottom: none;
-	height: 35px;
-	padding-top: 5px;
+	padding: 5px;
 	text-align: center;
 }
 
-#tab1 .open-restrictions-btn {
+.employee-restriction {
+	width: 90%;
+	margin: auto;
+	margin-bottom: 10px;
+	padding: 5px;
+	background-color: #fff;
+	border-radius: 5px;
+}
+
+.employee-restriction.general {
 	display: grid;
-	grid-template-columns: 1fr 20px;
-	width: 100%;
-	height: max-content;
-	background-color: #d3d3d375;
-	cursor: pointer;
-	padding-right: 50px;
-	font-size: 15px;
-	border: 1px solid #d3d3d390;
-	border-radius: 0 0 5px 5px;
+	grid-template-columns: repeat(5, max-content);
+	justify-content: space-between;
+	padding: 0 2vw;
+	height: 70px;
 	align-items: center;
-	justify-items: right;
-	-webkit-transition: all .3s;
-	transition: all .3s
 }
 
-#tab1 .open-restrictions-btn:hover {
-	background-color: #d3d3d3;
+.employee-restriction.general .select {
+	font-family: Verdana, Verdana, Geneva, sans-serif;
 }
 
-.new-employee-btn, .new-shift-btn, .new-restriction-btn {
+
+.employee-restriction.specific {
+	display: grid;
+	grid-template-columns: auto auto 1fr;
+	justify-content: space-around;
+	align-items: center;
+	font-family: courier new;
+	font-size: 120%;
+}
+
+#tab1 .new-restriction-btn {
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+	width: 90%;
+	height: 70px;
+	margin: auto;
+	text-align: center;
+	background-color: #fff7;
+	border: 1px solid #8880;
+	border-radius: 5px;
+	color: var(--green-bg);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	-webkit-transition: all .2s;
+	transition: all .2s;
+}
+
+#tab1 .new-restriction-btn > .text {
+	grid-column: 1 / 3;
+	display: grid;
+	align-items: center;
+	border-bottom: 1px solid #8883;
+	border-radius: 5px 5px 0 0;
+}
+
+#tab1 .employee-restriction-type {
+	display: grid;
+	align-items: center;
+	cursor: pointer;
+	transition: all .2s;
+}
+
+#tab1 .new-restriction-btn:hover > .text,
+ #tab1 .employee-restriction-type:hover {
+	background-color: #fff;
+	border-color: #d3d3d3;
+}
+
+#tab1 .new-restriction-btn:hover {
+	border-color: #d3d3d3;
+}
+
+.new-employee-btn, .new-shift-btn {
 	width: 100%;
 	height: 50px;
 	text-align: center;
@@ -433,12 +486,6 @@ input[type="range"]:active, input[type="range"]:hover {
 	-webkit-transition: all .2s;
 	transition: all .2s;
 }
-
-.new-employee-btn:hover, .new-shift-btn:hover, .new-restriction-btn:hover {
-	background-color: #ffffff;
-	border-color: #d3d3d3;
-}
-
 
 #tab2 .shift-main {
 	display: grid;
@@ -628,7 +675,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	border-radius: 0 0 5px 5px;
 }
 
-#tab2 .open-restrictions-btn {
+.open-restrictions-btn {
 	display: grid;
 	grid-template-columns: 1fr 20px;
 	width: 100%;
@@ -645,7 +692,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	transition: all .3s
 }
 
-#tab2 .open-restrictions-btn:hover {
+.open-restrictions-btn:hover {
 	background-color: #d3d3d3;
 }
 
@@ -657,7 +704,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	text-align: center;
 }
 
-#tab2 .shift-restriction, #tab2 .new-restriction-btn {
+#tab2 .shift-restriction {
 	margin: auto;
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -665,6 +712,28 @@ input[type="range"]:active, input[type="range"]:hover {
 	border-radius: 5px;
 	width: 90%;
 	padding: 5px 0;
+}
+
+#tab2 .new-restriction-btn {
+	margin: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 90%;
+	height: 40px;
+	padding: 5px 0;
+	border-radius: 5px;
+	border: 1px solid #0000;
+	text-align: center;
+	background-color: #fff7;
+	color: var(--green-bg);
+	cursor: pointer;
+	-webkit-transition: all .2s;
+	transition: all .2s;
+}
+
+.new-employee-btn:hover, .new-shift-btn:hover, #tab2 .new-restriction-btn:hover {
+	background-color: #fff;
+	border-color: #d3d3d3;
 }
 
 #tab2 .shift-restriction {
@@ -686,10 +755,6 @@ input[type="range"]:active, input[type="range"]:hover {
 	padding-top: 0;
 }
 
-#tab2 .new-restriction-btn {
-	height: 30px;
-	padding-top: 1px;
-}
 
 #tab2 .shift-restrictions .shift-number-employees {
 	grid-template-columns: 1fr 1fr;

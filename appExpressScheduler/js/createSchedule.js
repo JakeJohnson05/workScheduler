@@ -1,4 +1,8 @@
 let generateSchedule = function(date, employees, shifts, voidDays) {
+	// Update Calendar txt
+	let calendarTitleNode = document.getElementById('final-cal-title');
+	calendarTitleNode.innerHTML = `${ months[date['month']] } - ${ date['year'] }`
+
 	let outputNode = document.getElementsByClassName('tab-content tab5')[0];
 
 	// clear any previous content
@@ -65,6 +69,8 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 		// append day with data
 		outputNode.appendChild(workDayNode(i+1, dayDataNodes));
 	}
+
+	console.log(monthData);
 }
 
 
