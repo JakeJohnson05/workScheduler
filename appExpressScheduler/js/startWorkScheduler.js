@@ -73,6 +73,13 @@ let setTab = function(tab) {
 	let backBtn = document.getElementById('back-button');
 	let nextBtn = document.getElementById('next-button');
 	let progressBar = document.getElementById('progress-container');
+
+	backBtn.style.display = 'block';
+	nextBtn.style.display = 'block';
+	nextBtn.innerHTML = '<span>next &raquo;</span>';
+	progressBar.style.display = 'block';
+	nextBtn.onclick = () => nextTab();
+
 	switch(currentTab) {
 		case 0:
 			backBtn.style.display = 'none';
@@ -87,14 +94,7 @@ let setTab = function(tab) {
 		case 5:
 			nextBtn.style.display = 'none';
 			progressBar.style.display = 'none';
-			backBtn.style.display = 'block';
 			break;
-		default:
-			backBtn.style.display = 'block';
-			nextBtn.style.display = 'block';
-			nextBtn.innerHTML = '<span>next &raquo;</span>';
-			progressBar.style.display = 'block';
-			nextBtn.onclick = () => nextTab();
 	}
 }
 

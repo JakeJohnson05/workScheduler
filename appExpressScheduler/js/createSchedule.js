@@ -86,7 +86,6 @@ let weekDayNode = function() {
 		let innerNode = document.createElement('div');
 		innerNode.appendChild(document.createTextNode(weekDays[i]));
 		node.appendChild(innerNode);
-		// node.appendChild(document.createElement('div').appendChild(document.createTextNode(weekDays[i])));
 	}
 	return node;
 }

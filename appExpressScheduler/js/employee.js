@@ -34,4 +34,6 @@ class Employee {
 	addShift(day, shift) {
 		this._shifts['day'] = shift;
 	}
+	
+
 }
