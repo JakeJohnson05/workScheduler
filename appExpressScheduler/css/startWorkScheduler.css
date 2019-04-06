@@ -11,9 +11,8 @@ body, html {
 	grid-auto-rows: 1fr auto;
 	align-content: space-between;
 	height: 100%;
-	width: 100vw;
+	width: 100%;
 	min-height: 100vh;
-    overflow-x: hidden;
     margin: 0;
 	font-family: Verdana, Verdana, Geneva, sans-serif;
 	font-variant: small-caps;
@@ -22,6 +21,11 @@ body, html {
 div {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.content-box {
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
 }
 
 .no-select {
@@ -47,7 +51,7 @@ a {
 }
 
 #header, #footer {
-	height: 100px;
+	height: 90px;
 	background-color: var(--green-bg);
 	color: white;
 }
@@ -73,7 +77,7 @@ a {
 	width: max-content;
 	align-items: center;
 	text-align: center;
-	font-size: 25px;
+	font-size: 1.5vw;
 }
 
 #header-links div {
@@ -150,7 +154,7 @@ a {
 
 .validate.invalid {
 	background-color: #ed443120;
-	border-color: #ed4431; 
+	border-color: #ed4431;
 }
 
 #navigation {
@@ -326,7 +330,7 @@ input[type="range"] {
 	-webkit-appearance: none;
 	width: 100%;
 	height: 6px;
-	border-radius: 3px;   
+	border-radius: 3px;
 	background: #d3d3d3;
 	outline: none;
 	opacity: 0.7;
@@ -339,7 +343,7 @@ input[type="range"]::-webkit-slider-thumb {
 	appearance: none;
 	width: 17px;
 	height: 17px;
-	border-radius: 50%; 
+	border-radius: 50%;
 	background: var(--green-bg);
 	cursor: pointer;
 }
@@ -405,29 +409,70 @@ input[type="range"]:active, input[type="range"]:hover {
 	padding: 5px;
 	background-color: #fff;
 	border-radius: 5px;
+	border: 1px solid #d3d3d320;
+	-webkit-transition: border-color .2s;
+	-moz-transition: border-color .2s;
+	transition: border-color .2s;
 }
 
-.employee-restriction.general {
+.employee-restriction:hover {
+	border-color: #d3d3d3;
+}
+
+.emp-no-work-days-ctn {
 	display: grid;
-	grid-template-columns: repeat(5, max-content);
+	grid-template-columns: 33% 60%;
+	align-items: center;
+	grid-column-gap: 1vw;
 	justify-content: space-between;
-	padding: 0 2vw;
-	height: 70px;
-	align-items: center;
+	padding: 5px;
+	min-height: 50px;
+	font-size: 90%;
 }
 
-.employee-restriction.general .select {
-	font-family: Verdana, Verdana, Geneva, sans-serif;
-}
-
-
-.employee-restriction.specific {
+.emp-days-ctn {
 	display: grid;
-	grid-template-columns: auto auto 1fr;
-	justify-content: space-around;
-	align-items: center;
-	font-family: courier new;
-	font-size: 120%;
+	grid-template-columns: repeat(7, 1fr);
+	grid-row-gap: 1px;
+	grid-column-gap: 1px;
+	justify-content: center;
+	background-color: #e4e3e3;
+	border: 1px solid #d3d3d3;
+	border-radius: 5px;
+}
+
+.emp-days-ctn :first-child {
+	border-top-left-radius: 5px;
+}
+
+.emp-days-ctn :nth-child(7) {
+	border-top-right-radius: 5px;
+}
+
+.emp-days-week-day {
+	background-color: var(--green-bg);
+	color: #fff;
+	border-bottom: 2px solid #fff;
+}
+
+.emp-other-month {
+	background-color: #d3d3d3;
+}
+
+.emp-no-work-day {
+	background-color: var(--gray-bg);
+    user-select: none;
+	-webkit-transition: background-color .1s;
+	-moz-transition: background-color .1s;
+	transition: background-color .1s;
+}
+
+.emp-no-work-day:hover {
+	background-color: #fff;
+}
+
+.emp-no-work-day.selected {
+	background-color: #f79e96;
 }
 
 #tab1 .new-restriction-btn {
@@ -445,12 +490,14 @@ input[type="range"]:active, input[type="range"]:hover {
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: 1fr 1fr;
 	-webkit-transition: all .2s;
+	-moz-transition: all .2s;
 	transition: all .2s;
 }
 
 #tab1 .new-restriction-btn > .text {
 	grid-column: 1 / 3;
 	display: grid;
+	background-color: #fff;
 	align-items: center;
 	border-bottom: 1px solid #8883;
 	border-radius: 5px 5px 0 0;
@@ -564,7 +611,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	width: 40px;
 	height: 40px;
 	border: 1px solid var(--green-bg);
-	border-radius: 5px; 
+	border-radius: 5px;
 }
 
 .shift-number-employees > .number-button {
@@ -590,7 +637,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	font-size: 12px;
 	width: max-content;
 	align-items: start;
-	justify-items: right; 
+	justify-items: right;
 }
 
 
@@ -858,6 +905,13 @@ input[type="range"]:active, input[type="range"]:hover {
 	max-height: 80px;
 	justify-items: center;
 	color: #797978;
+	-webkit-transition: background-color .1s;
+	-moz-transition: background-color .1s;
+	transition: background-color .1s;
+}
+
+#tab3 .calendar-content > div:hover {
+	background-color: #fff7;
 }
 
 #tab3 .calendar-content > div.selected {

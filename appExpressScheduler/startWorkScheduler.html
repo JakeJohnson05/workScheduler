@@ -3,19 +3,31 @@
 <head>
 	<title>Work Scheduler</title>
 	<link rel="shortcut icon" href="/images/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="css/nouislider.css">
+	<link rel="stylesheet" type="text/css" href="css/nouislider.min.css">
+
+	<!-- Full Sized files for debugging -->
+
 	<link rel="stylesheet" type="text/css" href="css/startWorkScheduler.css">
 	<script type="text/javascript" src="js/employee.js"></script>
 	<script type="text/javascript" src="js/shift.js"></script>
-	<script type="text/javascript" src="js/createSchedule.js"></script>
 	<script type="text/javascript" src="js/startWorkScheduler.js"></script>
-	<script type="text/javascript" src="js/nouislider.js"></script>
+	<script type="text/javascript" src="js/createSchedule.js"></script>
+
+	<!-- Minimized files for production -->
+	<!--
+	<link rel="stylesheet" type="text/css" href="css/startWorkScheduler.min.css">
+	<script type="text/javascript" src="js/employee.min.js"></script>
+	<script type="text/javascript" src="js/shift.min.js"></script>
+	<script type="text/javascript" src="js/startWorkScheduler.min.js"></script>
+	<script type="text/javascript" src="js/createSchedule.min.js"></script>
+	-->
+	<script type="text/javascript" src="js/nouislider.min.js"></script>
 	<script type="text/javascript">window.onload=()=>{let dateObj=new Date();document.getElementsByClassName("data")[0].getElementsByTagName('option')[((dateObj.getMonth()<11)?dateObj.getMonth()+1:1)+1].selected=true;createYearOptions(new Date().getFullYear());}</script>
 </head>
 <body>
 	<div class="content">
 		<div id="header">
-			<div id="header-title">
+			<div id="header-title" onclick="consoleData();">
 				<span>Work Scheduler</span>
 			</div>
 			<div id="header-links">
@@ -50,7 +62,7 @@
 							<label>Month:</label>
 						</div>
 						<div class="tab0 month input-field">
-							<select class="data" oninput="visitedTabs[3] = false;">
+							<select id="month-select" class="data" oninput="visitedTabs[3] = false;generateEmpNoWorkNodes();">
 								<option value="" disabled>-- Select Month --</option>
 								<option value="0">January</option>
 								<option value="1">February</option>
@@ -72,7 +84,7 @@
 							<label>Year:</label>
 						</div>
 						<div class="tab0 year input-field">
-							<select class="data" oninput="visitedTabs[3] = false;">
+							<select id="year-select" class="data" oninput="visitedTabs[3] = false;generateEmpNoWorkNodes();">
 								<option value="" disabled>-- Select Year --</option>
 							</select>
 						</div>
@@ -124,65 +136,14 @@
 							</div>
 							<div class="employee-restrictions">
 								<div class="restriction-list" hidden>
-									<!-- <div class="employee-restriction general">
-										<div class="start-text">
-											<span>Cannot work:</span>
+									<div class="employee-restriction emp-no-work-days-ctn content-box">
+										<div>
+											<span>Employee is unavailable on:</span>
 										</div>
-										<div class="day-of-weeks">
-											<div class="shift-days">
-												<div class="top-days">
-													<label class="checkbox-container">Sunday
-														<input type="checkbox" class="data"/>
-														<span class="checkmark"></span>
-													</label>
-													<label class="checkbox-container">Monday
-														<input type="checkbox" class="data" checked="checked"/>
-														<span class="checkmark"></span>
-													</label>
-													<label class="checkbox-container">Tuesday
-														<input type="checkbox" class="data" checked="checked"/>
-														<span class="checkmark"></span>
-													</label>
-													<label class="checkbox-container">Wednesday
-														<input type="checkbox" class="data" checked="checked"/>
-														<span class="checkmark"></span>
-													</label>
-												</div>
-												<div class="bottom-days">
-													<label class="checkbox-container">Thursday
-														<input type="checkbox" class="data" checked="checked"/>
-														<span class="checkmark"></span>
-													</label>
-													<label class="checkbox-container">Friday
-														<input type="checkbox" class="data" checked="checked"/>
-														<span class="checkmark"></span>
-													</label>
-													<label class="checkbox-container">Saturday
-														<input type="checkbox" class="data"/> 
-														<span class="checkmark"></span>
-													</label>
-												</div>
-											</div>
-										</div>
-										<div class="time-reference">
-											<div class="type input-field" style="width:80px; grid-template-rows: 1fr">
-												<select class="data select">
-													<option value="0">Before</option>
-													<option value="1">After</option>
-												</select>
-											</div>
-										</div>
-										<div class="time"></div>
-										<div class="delete-button no-select"></div>
-									</div> -->
-									<div class="employee-restriction specific">
-										<div class="start-text">
-											<span>Cannot Work On The </span>
-										</div>
-										<div class="date-selector"></div>
-										<div class="delete-button no-select"></div>
+										<div class="emp-days-ctn no-select"></div>
 									</div>
-									<div class="new-restriction-btn">
+
+									<!-- <div class="new-restriction-btn">
 										<div class="text">
 											<span>Create New Restriction</span>
 										</div>
@@ -192,10 +153,9 @@
 										<div class="employee-restriction-type" style="border-left:1px solid #8883; border-radius: 0 0 5px 0;">
 											<span>Specific</span>
 										</div>
-									</div>
+									</div> -->
 								</div>
-								<!-- <div class="open-restrictions-btn" onclick="editRestrictView(this.parentNode);"> -->
-								<div class="open-restrictions-btn" style="cursor:not-allowed;">
+								<div class="open-restrictions-btn" onclick="editRestrictView(this.parentNode);">
 									<div style="font-size:13px;">restrictions</div>
 									<div>&#8691;</div>
 								</div>
@@ -257,7 +217,7 @@
 											<span class="checkmark"></span>
 										</label>
 										<label class="checkbox-container">Saturday
-											<input type="checkbox" class="data"/> 
+											<input type="checkbox" class="data"/>
 											<span class="checkmark"></span>
 										</label>
 									</div>
@@ -299,7 +259,7 @@
 									</div>
 									<div class="new-restriction-btn" onclick="addShiftRestriction(this.parentNode);">Create New Condition</div>
 								</div>
-								<div class="open-restrictions-btn" onclick="editRestrictView(this.parentNode);">
+								<div class="open-restrictions-btn" style="cursor:not-allowed;" onclick="//editRestrictView(this.parentNode);">
 									<div style="font-size:13px;">conditions</div>
 									<div>&#8691;</div>
 								</div>
@@ -373,6 +333,6 @@
 				<span>CONTACT ME</span>
 			</div>
 		</a>
-	</div> 
+	</div>
 </body>
 </html>

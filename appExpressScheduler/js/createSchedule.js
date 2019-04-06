@@ -6,18 +6,17 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 	let outputNode = document.getElementsByClassName('tab-content tab5')[0];
 
 	// clear any previous content
-	while(outputNode.lastChild) {
-				outputNode.removeChild(outputNode.lastChild);
-	}
-	var month = new Date(date['year'], date['month']);
+	while(outputNode.lastChild) outputNode.removeChild(outputNode.lastChild);
+
+	var finalMonth = new Date(date['year'], date['month']);
 	let daysInMonth = new Date(date['year'], date['month']+1, 0).getDate();
 	let monthData = [];
 
 	// set monthData to contain dict of keys as dayNum and shifts as values
 	for (let i = 1; i <= daysInMonth; i++) {
 		let day = [];
-		month.setDate(i)
-		dayOfWeek = month.getDay();
+		finalMonth.setDate(i)
+		dayOfWeek = finalMonth.getDay();
 
 		// Apply shift value if applicable
 		for (let j = 0; j < shifts.length; j++) {
@@ -25,6 +24,7 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 			if (shift.daysInWeek[dayOfWeek] && !voidDays.includes(i)) {
 				day.push({
 					'time': shift.time,
+					'length': shift.length,
 					'numEmp': shift.numEmployees,
 					'req': shift.requirements,
 				});
@@ -32,6 +32,9 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 		}
 		monthData.push(day);
 	}
+
+	// get monthData in 3d array [[week1], [week2],...]
+	let monthDataByWeek = getMonthDataByWeek(monthData, (new Date(date['year'], date['month'], 1)).getDay(), daysInMonth);
 
 
 	/* ------------ generate content ------------ */
@@ -41,8 +44,8 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 	var week = 2;
 
 	// set space divs for previous month days
-	month.setDate(1);
-	for (let i = 0; i < month.getDay(); i++) {
+	finalMonth.setDate(1);
+	for (let i = 0; i < finalMonth.getDay(); i++) {
 		let node = document.createElement('div');
 		node.classList.add('other-month');
 		outputNode.appendChild(node);
@@ -51,8 +54,8 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 	// generate month days and rest of week titles
 	for (let i = 0; i < monthData.length; i++) {
 		// If start of the week
-		month.setDate(i + 1);
-		if (month.getDay() === 0 && i != 0) {
+		finalMonth.setDate(i + 1);
+		if (finalMonth.getDay() === 0 && i != 0) {
 			outputNode.appendChild(weekTitleNode(week));
 			outputNode.appendChild(weekDayNode());
 			week++;
@@ -63,7 +66,7 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 
 		// generate day data
 		for (let j = 0; j < dayData.length; j++) {
-			dayDataNodes.push(shiftNode(dayData[j]['time'], employees[0]));
+			dayDataNodes.push(shiftNode(dayData[j]['time'], dayData[j]['length'], employees[0]));
 		}
 
 		// append day with data
@@ -71,8 +74,44 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 	}
 
 	console.log(monthData);
+	console.log(monthDataByWeek);
 }
 
+let getMonthDataByWeek = function(monthArray, firstDayOfWeek, daysInMonth) {
+	let monthDataByWeek = [];
+
+	// Push remaining days from last month to firstWeek
+	let firstWeek = [];
+	for (let i =0; i < firstDayOfWeek; i++) firstWeek.push(null);
+
+	// Push remaining actual days to firstWeek
+	var i = 0;
+	while (firstWeek.length < 7) {
+		firstWeek.push(monthArray[i]);
+		i++;
+	}
+	monthDataByWeek.push(firstWeek);
+
+
+	// Add rest of monthArray
+	var weekArray = [];
+	while (i < monthArray.length) {
+		// Add next day to weekArray
+		weekArray.push(monthArray[i]);
+		i++;
+
+		// If weekArray.len = 7, push weekArray and clear weekArray
+		if (weekArray.length === 7) {
+			monthDataByWeek.push(weekArray);
+			weekArray = [];
+		}
+	}
+
+	// push any possible remaining days IF week not finished
+	if (weekArray.length > 0) monthDataByWeek.push(weekArray);
+
+	return monthDataByWeek;
+}
 
 let weekTitleNode = function(weekNum) {
 	let node = document.createElement('div');
@@ -113,7 +152,12 @@ let workDayNode = function(dayNum, shiftNodes) {
 	return node;
 }
 
-let shiftNode = function(time, ...employees) {
+let round = function (value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
+
+let shiftNode = function(time, length, ...employees) {
 	let shift = document.createElement('div');
 	shift.classList.add('tab5', 'shift');
 	/* ------------ create time div ------------ */
@@ -123,8 +167,8 @@ let shiftNode = function(time, ...employees) {
 
 	// 'Time:' txt node
 	let timeTxt = document.createElement('div');
-	timeTxt.appendChild(document.createTextNode('Time:'));
-	timeNode.appendChild(timeTxt);
+	timeNode.innerHTML = 'Time: <span style="font-size:60%;color:#000">(' + round(length / 60, 1) +' hrs)</span>'
+
 	// work times txt node
 	let workTimes = document.createElement('div');
 	workTimes.appendChild(document.createTextNode(`${ prettyPrintTime(time['start']) } - ${ prettyPrintTime(time['end']) }`));
@@ -134,6 +178,8 @@ let shiftNode = function(time, ...employees) {
 	shift.appendChild(timeNode);
 
 	/* ------------ create employees div ------------ */
+
+
 
 	return shift;
 }
