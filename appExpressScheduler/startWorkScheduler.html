@@ -102,7 +102,7 @@
 									<label>name:</label>
 									<!-- remove name preset value! only for production -->
 									<script type="text/javascript">console.log('remove Employee name preset value!! only for production');</script>
-									<input type="text" class="validate data" maxlength="23" value="John Doe" placeholder="employee name" />
+									<input type="text" class="validate data" maxlength="23" value="John Doe 0" placeholder="employee name" />
 								</div>
 								<div class="type input-field" style="max-width:260px; min-width:170px;">
 									<label>classification:</label>
@@ -142,7 +142,6 @@
 										</div>
 										<div class="emp-days-ctn no-select"></div>
 									</div>
-
 									<!-- <div class="new-restriction-btn">
 										<div class="text">
 											<span>Create New Restriction</span>
@@ -161,6 +160,200 @@
 								</div>
 							</div>
 						</div>
+						<div class="employee">
+							<div class="employee-main">
+								<div class="input-field name" style="min-width:245px; max-width:350px">
+									<label>name:</label>
+									<!-- remove name preset value! only for production -->
+									<script type="text/javascript">console.log('remove Employee name preset value!! only for production');</script>
+									<input type="text" class="validate data" maxlength="23" value="John Doe 1" placeholder="employee name" />
+								</div>
+								<div class="type input-field" style="max-width:260px; min-width:170px;">
+									<label>classification:</label>
+									<select class="data classif-select">
+										<option value="0">Associate</option>
+										<option value="1">Owner</option>
+										<option value="2">Manager</option>
+										<option value="3">Supervisor</option>
+										<option value="4">New Hire</option>
+										<option value="5">Assistant</option>
+										<option value="6">Clerk</option>
+										<option value="7">Receptionist</option>
+										<option value="8">Coordinator</option>
+										<option value="9">Administrator</option>
+										<option value="10">President</option>
+										<option value="11">Specialist</option>
+									</select>
+								</div>
+								<div class="maxhrs">
+									<div>
+										<label>max hrs/wk:</label>
+									</div>
+									<div>
+										<span style="font-size:0.9rem; padding-top:5px;">40</span>
+									</div>
+									<div class="range-field" style="grid-column:1 / 3;">
+										<input type="range" class="data" min="0" max="61" value="40" oninput="updateSlider(this);" />
+									</div>
+								</div>
+								<div class="delete delete-button no-select" onclick="deleteEmployee(this.parentNode.parentNode);"></div>
+							</div>
+							<div class="employee-restrictions">
+								<div class="restriction-list" hidden>
+									<div class="employee-restriction emp-no-work-days-ctn content-box">
+										<div>
+											<span>Employee is unavailable on:</span>
+										</div>
+										<div class="emp-days-ctn no-select"></div>
+									</div>
+									<!-- <div class="new-restriction-btn">
+										<div class="text">
+											<span>Create New Restriction</span>
+										</div>
+										<div class="employee-restriction-type" style="border-right:1px solid #8883; border-radius:0 0 0 5px; cursor:not-allowed;">
+											<span>General</span>
+										</div>
+										<div class="employee-restriction-type" style="border-left:1px solid #8883; border-radius: 0 0 5px 0;">
+											<span>Specific</span>
+										</div>
+									</div> -->
+								</div>
+								<div class="open-restrictions-btn" onclick="editRestrictView(this.parentNode);">
+									<div style="font-size:13px;">restrictions</div>
+									<div>&#8691;</div>
+								</div>
+							</div>
+						</div>
+						<div class="employee">
+							<div class="employee-main">
+								<div class="input-field name" style="min-width:245px; max-width:350px">
+									<label>name:</label>
+									<!-- remove name preset value! only for production -->
+									<script type="text/javascript">console.log('remove Employee name preset value!! only for production');</script>
+									<input type="text" class="validate data" maxlength="23" value="John Doe 2" placeholder="employee name" />
+								</div>
+								<div class="type input-field" style="max-width:260px; min-width:170px;">
+									<label>classification:</label>
+									<select class="data classif-select">
+										<option value="0">Associate</option>
+										<option value="1">Owner</option>
+										<option value="2">Manager</option>
+										<option value="3">Supervisor</option>
+										<option value="4">New Hire</option>
+										<option value="5">Assistant</option>
+										<option value="6">Clerk</option>
+										<option value="7">Receptionist</option>
+										<option value="8">Coordinator</option>
+										<option value="9">Administrator</option>
+										<option value="10">President</option>
+										<option value="11">Specialist</option>
+									</select>
+								</div>
+								<div class="maxhrs">
+									<div>
+										<label>max hrs/wk:</label>
+									</div>
+									<div>
+										<span style="font-size:0.9rem; padding-top:5px;">40</span>
+									</div>
+									<div class="range-field" style="grid-column:1 / 3;">
+										<input type="range" class="data" min="0" max="61" value="40" oninput="updateSlider(this);" />
+									</div>
+								</div>
+								<div class="delete delete-button no-select" onclick="deleteEmployee(this.parentNode.parentNode);"></div>
+							</div>
+							<div class="employee-restrictions">
+								<div class="restriction-list" hidden>
+									<div class="employee-restriction emp-no-work-days-ctn content-box">
+										<div>
+											<span>Employee is unavailable on:</span>
+										</div>
+										<div class="emp-days-ctn no-select"></div>
+									</div>
+									<!-- <div class="new-restriction-btn">
+										<div class="text">
+											<span>Create New Restriction</span>
+										</div>
+										<div class="employee-restriction-type" style="border-right:1px solid #8883; border-radius:0 0 0 5px; cursor:not-allowed;">
+											<span>General</span>
+										</div>
+										<div class="employee-restriction-type" style="border-left:1px solid #8883; border-radius: 0 0 5px 0;">
+											<span>Specific</span>
+										</div>
+									</div> -->
+								</div>
+								<div class="open-restrictions-btn" onclick="editRestrictView(this.parentNode);">
+									<div style="font-size:13px;">restrictions</div>
+									<div>&#8691;</div>
+								</div>
+							</div>
+						</div>
+						<div class="employee">
+							<div class="employee-main">
+								<div class="input-field name" style="min-width:245px; max-width:350px">
+									<label>name:</label>
+									<!-- remove name preset value! only for production -->
+									<script type="text/javascript">console.log('remove Employee name preset value!! only for production');</script>
+									<input type="text" class="validate data" maxlength="23" value="John Doe 3" placeholder="employee name" />
+								</div>
+								<div class="type input-field" style="max-width:260px; min-width:170px;">
+									<label>classification:</label>
+									<select class="data classif-select">
+										<option value="0">Associate</option>
+										<option value="1">Owner</option>
+										<option value="2">Manager</option>
+										<option value="3">Supervisor</option>
+										<option value="4">New Hire</option>
+										<option value="5">Assistant</option>
+										<option value="6">Clerk</option>
+										<option value="7">Receptionist</option>
+										<option value="8">Coordinator</option>
+										<option value="9">Administrator</option>
+										<option value="10">President</option>
+										<option value="11">Specialist</option>
+									</select>
+								</div>
+								<div class="maxhrs">
+									<div>
+										<label>max hrs/wk:</label>
+									</div>
+									<div>
+										<span style="font-size:0.9rem; padding-top:5px;">40</span>
+									</div>
+									<div class="range-field" style="grid-column:1 / 3;">
+										<input type="range" class="data" min="0" max="61" value="40" oninput="updateSlider(this);" />
+									</div>
+								</div>
+								<div class="delete delete-button no-select" onclick="deleteEmployee(this.parentNode.parentNode);"></div>
+							</div>
+							<div class="employee-restrictions">
+								<div class="restriction-list" hidden>
+									<div class="employee-restriction emp-no-work-days-ctn content-box">
+										<div>
+											<span>Employee is unavailable on:</span>
+										</div>
+										<div class="emp-days-ctn no-select"></div>
+									</div>
+									<!-- <div class="new-restriction-btn">
+										<div class="text">
+											<span>Create New Restriction</span>
+										</div>
+										<div class="employee-restriction-type" style="border-right:1px solid #8883; border-radius:0 0 0 5px; cursor:not-allowed;">
+											<span>General</span>
+										</div>
+										<div class="employee-restriction-type" style="border-left:1px solid #8883; border-radius: 0 0 5px 0;">
+											<span>Specific</span>
+										</div>
+									</div> -->
+								</div>
+								<div class="open-restrictions-btn" onclick="editRestrictView(this.parentNode);">
+									<div style="font-size:13px;">restrictions</div>
+									<div>&#8691;</div>
+								</div>
+							</div>
+						</div>
+
+
 						<div class="new-employee-btn" onclick="addEmployee();">New Employee</div>
 					</div>
 				</div>
@@ -296,7 +489,11 @@
 
 			<div id="tab4" class="form-tab" style="display:none">
 				<div class="tab-title">Confirm Information</div>
-				<div class="tab-content tab4"></div>
+				<div class="tab-content tab4">
+					<div style="height: 100px; width: 200px; text-align: center; background-color: #fff; border-radius: 10px; cursor:pointer; margin: auto; margin-top:0; margin-bottom: 0;" onclick="loadExampleData();">
+						<span>Use Example Data</span>
+					</div>
+				</div>
 			</div>
 
 			<div id="tab5" class="form-tab" style="display:none">
@@ -325,8 +522,8 @@
 			</a>
 		</div>
 		<div id="my-info">
-			<p style="font-size:120%">Jake Johnson</p>
-			<p>Salt Lake City, UT</p>
+			<span style="font-size:120%">Jake Johnson</span><br/>
+			<span>Salt Lake City, UT</span>
 		</div>
 		<a href="http://www.jakejohnson.pro/contact" target="_blank">
 			<div id="footer-contact">

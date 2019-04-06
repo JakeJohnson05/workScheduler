@@ -27,6 +27,7 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 					'length': shift.length,
 					'numEmp': shift.numEmployees,
 					'req': shift.requirements,
+					'empList': []
 				});
 			}
 		}
@@ -35,6 +36,7 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 
 	// get monthData in 3d array [[week1], [week2],...]
 	let monthDataByWeek = getMonthDataByWeek(monthData, (new Date(date['year'], date['month'], 1)).getDay(), daysInMonth);
+	console.log(monthDataByWeek);
 
 
 	/* ------------ generate content ------------ */
@@ -66,15 +68,13 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 
 		// generate day data
 		for (let j = 0; j < dayData.length; j++) {
-			dayDataNodes.push(shiftNode(dayData[j]['time'], dayData[j]['length'], employees[0]));
+			dayDataNodes.push(shiftNode(dayData[j].time, dayData[j].length, dayData[j].empList));
 		}
 
 		// append day with data
 		outputNode.appendChild(workDayNode(i+1, dayDataNodes));
 	}
 
-	console.log(monthData);
-	console.log(monthDataByWeek);
 }
 
 let getMonthDataByWeek = function(monthArray, firstDayOfWeek, daysInMonth) {
@@ -123,10 +123,8 @@ let weekTitleNode = function(weekNum) {
 let weekDayNode = function() {
 	let node = document.createElement('div');
 	node.classList.add('weekdays', 'tab5');
-	let weekDays = [
-		'Sun', 'Mon', 'Tue', 'Wed',
-		'Thu', 'Fri', 'Sat',
-	];
+	let weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
 	for (let i = 0; i < weekDays.length; i++) {
 		let innerNode = document.createElement('div');
 		innerNode.appendChild(document.createTextNode(weekDays[i]));
@@ -157,9 +155,10 @@ let round = function (value, precision) {
     return Math.round(value * multiplier) / multiplier;
 }
 
-let shiftNode = function(time, length, ...employees) {
+let shiftNode = function(time, length, employees) {
 	let shift = document.createElement('div');
 	shift.classList.add('tab5', 'shift');
+
 	/* ------------ create time div ------------ */
 	// outerNode
 	let timeNode = document.createElement('div');
@@ -167,19 +166,37 @@ let shiftNode = function(time, length, ...employees) {
 
 	// 'Time:' txt node
 	let timeTxt = document.createElement('div');
-	timeNode.innerHTML = 'Time: <span style="font-size:60%;color:#000">(' + round(length / 60, 1) +' hrs)</span>'
+	timeTxt.innerHTML = 'Time: <span style="font-size:60%;color:#000">(' + round(length / 60, 1) +' hrs)</span>'
+	timeNode.appendChild(timeTxt);
 
-	// work times txt node
+	// work times node
 	let workTimes = document.createElement('div');
 	workTimes.appendChild(document.createTextNode(`${ prettyPrintTime(time['start']) } - ${ prettyPrintTime(time['end']) }`));
 	workTimes.classList.add('work-times')
 	timeNode.appendChild(workTimes);
 
-	shift.appendChild(timeNode);
 
 	/* ------------ create employees div ------------ */
+	// outerNode
+	let empNode = document.createElement('div');
+	empNode.classList.add('emp');
 
+	// 'Employees:' txt node
+	let empTxt = document.createElement('div');
+	empTxt.innerHTML = 'Employees:';
+	empNode.appendChild(empTxt);
 
+	// node of actual employees
+	let shiftEmployees = document.createElement('div');
+	shiftEmployees.classList.add('employee-list');
+	let empListTxt = ''
+	for (empIndex = 0; empIndex < employees.length; empIndex++) {
+		empListTxt += employees[empIndex].name + '<br/>';
+	}
+	shiftEmployees.innerHTML = empListTxt;
+	empNode.appendChild(shiftEmployees);
 
+	shift.appendChild(timeNode);
+	shift.appendChild(empNode);
 	return shift;
 }

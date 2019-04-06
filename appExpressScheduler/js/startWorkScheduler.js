@@ -148,9 +148,7 @@ let setUpCurrentTab = function() {
 			titles[1].innerHTML = selects[1].value;
 
 			let calContent = document.getElementsByClassName('calendar-content tab3')[0];
-			while(calContent.lastChild) {
-				calContent.removeChild(calContent.lastChild);
-			}
+			while(calContent.lastChild) calContent.removeChild(calContent.lastChild);
 			generateTab3Cal(Number(selects[0].value), Number(selects[1].value))
 			break;
 	}
@@ -159,7 +157,7 @@ let setUpCurrentTab = function() {
 let consoleData = function(tab) {
 	let tabList = document.getElementsByClassName('form-tab');
 	let calendarData = {
-		'date': [],
+		'date': {},
 		'employees': [],
 		'shifts': [],
 		'voidDays': [],
@@ -249,9 +247,7 @@ let generateEmpNoWorkNodes = function() {
 	for (let j = 0; j < allEmpNoWorkCtn.length; j++) {
 		let empNoWorkCtn = allEmpNoWorkCtn[j];
 
-		while (empNoWorkCtn.lastChild) {
-			empNoWorkCtn.removeChild(empNoWorkCtn.lastChild);
-		}
+		while(empNoWorkCtn.lastChild) empNoWorkCtn.removeChild(empNoWorkCtn.lastChild);
 
 		for (let i = 0; i < 7; i++) {
 			let node = document.createElement('div');
@@ -391,7 +387,37 @@ let generateTab3Cal = function(month, year) {
 			"if(this.classList.contains('selected')){this.classList.remove('selected')}else{this.classList.add('selected')}");
 		calendar.appendChild(newDay);
 	}
+}
 
 
 
+
+let loadExampleData = function() {
+	setTab(5);
+
+// startTime, endTime, numEmployees, days, requirements
+	let fakeCalendarData = {
+		'date': {'month': 4, 'year': 2019},
+		'employees': [
+			new Employee('Jake', 1, 50, 10, 17, 18, 19),
+			new Employee('Todd', 0, 20, 5, 6, 7, 8),
+			new Employee('Ryland', 0, 16, 19, 21, 22, 28),
+			new Employee('John', 0, 36, 5, 12, 29, 26),
+			new Employee('Brynn', 3, 36, 29, 30),
+			new Employee('Felicia', 3, 10, 21, 22, 23),
+			new Employee('Dinosuar', 3, 61, 13, 17, 18, 21),
+			new Employee('Kyle', 0, 30),
+			new Employee('Kira', 0, 25),
+		],
+		'shifts': [
+			new Shift(480, 780, 2, [false, true, true, true, true, true, false]),
+			new Shift(720, 1020, 2, [false, true, true, true, true, true, false]),
+			new Shift(720, 1080, 2, [true, false, false, false, false, false, false]),
+			new Shift(900, 1080, 1, [false, false, false, false, false, true, false]),
+		],
+		'voidDays': [17, 24, 25, 26, 27],
+	}
+
+
+	generateSchedule(fakeCalendarData['date'], fakeCalendarData['employees'], fakeCalendarData['shifts'], fakeCalendarData['voidDays']);
 }

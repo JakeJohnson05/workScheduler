@@ -77,10 +77,12 @@ a {
 	width: max-content;
 	align-items: center;
 	text-align: center;
-	font-size: 1.5vw;
+	font-size: 20px;
 }
 
 #header-links div {
+	-webkit-transition: opacity .2s;
+	-moz-transition: opacity .2s;
 	transition: opacity .2s;
 }
 
@@ -111,10 +113,19 @@ a {
 	text-align: center;
 	height: 60px;
 	width: 140px;
-	font-size: 120%;
 	background-color: #888;
 	padding-top: 20px;
-	border-radius: 5px;
+	border-radius: 8px;
+	font-size: 120%;
+	opacity: .95;
+	-webkit-transition: opacity .1s, margin-bottom .1s;
+	-moz-transition: opacity .1s, margin-bottom .1s;
+	transition: opacity .1s, margin-bottom .1s;
+}
+
+#footer-contact:hover {
+	opacity: 1;
+	margin-bottom: 2px;
 }
 
 #progress-container {
@@ -134,8 +145,9 @@ a {
 	border-radius: 15px;
 	padding-top: 5px;
 	color: #fff;
-	transition: all .3s;
 	-webkit-transition: all .3s;
+	-moz-transition: all .3s;
+	transition: all .3s;
 }
 
 #tab-container {
@@ -171,19 +183,22 @@ a {
 	height: 55px;
 	background-color: var(--green-bg);
 	opacity: .9;
+	border: 1px solid #d3d3d3;
 	color: #fff;
 	text-align: center;
 	border-radius: 10px;
 	font-size: 25px;
 	padding-top: 10px;
 	cursor: pointer;
+	-webkit-transition: all .1s;
+	-moz-transition: all .1s;
 	transition: all .1s;
-	-webkit-transtion: all .1s;
 }
 
 .nav-button > span {
+	-webkit-transition: all .3s;
+	-moz-transition: all .3s;
 	transition: all .3s;
-	-webkit-transtion: all .3s;
 }
 .nav-button:hover {
 	opacity: 1;
@@ -264,6 +279,14 @@ a {
 	height: 100%;
 	background-color: #fff;
 	border-radius: 5px;
+	border: 1px solid #d3d3d350;
+	-webkit-transition: border-color .2s;
+	-moz-transition: border-color .2s;
+	transition: border-color .2s;
+}
+
+#tab1 .employee:hover {
+	border-color: #d3d3d3;
 }
 
 #tab1 .employee-main {
@@ -986,10 +1009,14 @@ input[type="range"]:active, input[type="range"]:hover {
 	font-size: 70%;
 }
 
-#tab5 .day .shift {
+#tab5 .tab5.shift {
 	width: 100%;
 	margin: auto;
 	margin-top: 5px;
+}
+
+#tab5 .tab5.shift > div {
+	color: var(--green-bg);
 }
 
 #tab5 .day > .shift + .shift {
@@ -998,11 +1025,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	padding-top: 10px;
 }
 
-#tab5 .day .time, #tab5 .day .employees {
-	color: var(--green-bg);
-}
-
-#tab5 .day .work-times {
+#tab5 .day .work-times, #tab5 .day .employee-list {
 	font-size: 80%;
 	color: initial;
 }

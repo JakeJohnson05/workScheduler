@@ -1,10 +1,11 @@
 class Employee {
-	constructor(name, classification, maxHours) {
+	constructor(name, classification, maxHours, ...restrictions) {
 		this._empName = name;
 		this._empClass = Number(classification);
 		this._empMaxHrs = Number(maxHours);
-		this._empRestr = [];
-		this._shifts = {};
+		this._empRestr = (restrictions) ? restrictions:[];
+		this._hoursInCurrentWeek = 0;
+		// this._shifts = {};
 	}
 
 	static listToEmployee (name, classification, maxHours) {
@@ -12,7 +13,7 @@ class Employee {
 	}
 
 	get name () {
-		return this._empName.toString();
+		return this._empName;
 	}
 	get class () {
 		return this._empClass;
@@ -26,6 +27,13 @@ class Employee {
 	get restr () {
 		return this._restrictions;
 	}
+	get hoursThisWeek () {
+		return this._hoursInCurrentWeek;
+	}
+
+	get weekHrsRemain () {
+		return this._empMaxHrs - this._hoursInCurrentWeek;
+	}
 
 	addRestrictions(...args) {
 		for (let i = 0; i < args.length; i++) {
@@ -33,13 +41,32 @@ class Employee {
 		}
 	}
 
-	deleteAllShifts() {
-		this._shifts = {};
+	canWork(hrs, date) {
+		let canWork = true;
+		if (this.weekHrsRemain + Number(hrs) < this._empMaxHrs) {
+			canWork = false;
+		} else if (this._restrictions.includes(date)) {
+			canWork = false;
+		}
+		return canWork
+
 	}
 
-	addShift(day, shift) {
-		this._shifts['day'] = shift;
+	addWeekHours(hrs) {
+		this._hoursInCurrentWeek += hrs;
 	}
+
+	resetWeekHours() {
+		this._hoursInCurrentWeek = 0;
+	}
+
+	// deleteAllShifts() {
+	// 	this._shifts = {};
+	// }
+
+	// addShift(day, shift) {
+	// 	this._shifts['day'] = shift;
+	// }
 
 
 }
