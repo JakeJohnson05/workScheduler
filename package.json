@@ -5,8 +5,7 @@
   "main": "myapp.js",
   "scripts": {
     "start": "node myapp.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "ng build"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
