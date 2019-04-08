@@ -1,6 +1,4 @@
-var lastData;
 let generateSchedule = function(date, employees, shifts, voidDays) {
-	// var employees = emps;
 	var shiftTrialMax = 30;
 	// Update Calendar txt
 	let calendarTitleCtn = document.getElementById('final-cal-title');

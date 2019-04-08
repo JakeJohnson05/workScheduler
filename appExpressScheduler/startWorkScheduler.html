@@ -302,7 +302,10 @@
 			<div id="tab5" class="form-tab" style="display:none">
 				<div id="final-cal-title" class="tab-title">Calendar</div>
 				<div id="shuffle-ctn">
-					<div id="shuffle-btn" onclick="consoleData();">
+					<div class="shuffle-btn" onclick="loadExampleData();">
+						<span style="font-size:80%;">SHUFFLE EXAMPLE DATA</span>
+					</div>
+					<div class="shuffle-btn" onclick="consoleData();">
 						<span>SHUFFLE</span>
 					</div>
 				</div>
@@ -332,6 +335,9 @@
 		<div id="my-info">
 			<span style="font-size:120%">Jake Johnson</span><br/>
 			<span>Salt Lake City, UT</span>
+		</div>
+		<div id="fake-content-btn" class="shuffle-btn" onclick="loadExampleData();">
+			<span>Use Example Data</span>
 		</div>
 		<a href="http://www.jakejohnson.pro/contact" target="_blank">
 			<div id="footer-contact">

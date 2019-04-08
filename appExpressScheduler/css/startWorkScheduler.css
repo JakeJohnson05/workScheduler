@@ -96,7 +96,7 @@ a {
 
 #footer {
 	display: grid;
-	grid-template-columns: auto 1fr auto;
+	grid-template-columns: auto 1fr auto auto;
 	justify-content: space-between;
 	align-items: center;
 	padding: 0 2vw;
@@ -117,7 +117,7 @@ a {
 	padding-top: 20px;
 	border-radius: 8px;
 	font-size: 120%;
-	opacity: .95;
+	opacity: .87;
 	-webkit-transition: opacity .1s, margin-bottom .1s;
 	-moz-transition: opacity .1s, margin-bottom .1s;
 	transition: opacity .1s, margin-bottom .1s;
@@ -125,7 +125,7 @@ a {
 
 #footer-contact:hover {
 	opacity: 1;
-	margin-bottom: 2px;
+	/*margin-bottom: 2px;*/
 }
 
 #progress-container {
@@ -955,14 +955,16 @@ input[type="range"]:active, input[type="range"]:hover {
 
 #shuffle-ctn {
 	display: grid;
+	grid-template-columns: auto auto;
 	width: 100%;
-	justify-content: right;
+	justify-content: space-between;
 }
 
-#shuffle-btn {
+.shuffle-btn {
 	display: grid;
 	align-items: center;
 	justify-items: center;
+	text-align: center;
 	border-radius: 10px;
 	cursor: pointer;
 	height: 45px;
@@ -976,7 +978,11 @@ input[type="range"]:active, input[type="range"]:hover {
 	transition: opacity .2s;
 }
 
-#shuffle-btn:hover {
+#fake-content-btn {
+	opacity: .7;
+}
+
+.shuffle-btn:hover, #fake-content-btn:hover {
 	opacity: 1;
 }
 
