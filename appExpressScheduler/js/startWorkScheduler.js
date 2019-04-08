@@ -391,10 +391,8 @@ let generateTab3Cal = function(month, year) {
 
 
 
-
 let loadExampleData = function() {
 	setTab(5);
-
 // startTime, endTime, numEmployees, days, requirements
 	let fakeCalendarData = {
 		'date': {'month': 4, 'year': 2019},
@@ -405,7 +403,7 @@ let loadExampleData = function() {
 			new Employee('John', 0, 36, 5, 12, 29, 26),
 			new Employee('Brynn', 3, 36, 29, 30),
 			new Employee('Felicia', 3, 10, 21, 22, 23),
-			new Employee('Dinosuar', 3, 61, 13, 17, 18, 21),
+			new Employee('Dinosuar', 3, 60, 13, 17, 18, 21),
 			new Employee('Kyle', 0, 30),
 			new Employee('Kira', 0, 25),
 		],

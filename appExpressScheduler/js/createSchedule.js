@@ -1,21 +1,21 @@
-let generateSchedule = function(date, employees, shifts, voidDays) {
+let generateSchedule = function(date, emps, shifts, voidDays) {
+	var employees = emps;
+	var shiftTrialMax = 30;
 	// Update Calendar txt
 	let calendarTitleNode = document.getElementById('final-cal-title');
 	calendarTitleNode.innerHTML = `${ months[date['month']] } - ${ date['year'] }`
 
 	let outputNode = document.getElementsByClassName('tab-content tab5')[0];
-
 	// clear any previous content
 	while(outputNode.lastChild) outputNode.removeChild(outputNode.lastChild);
 
 	var finalMonth = new Date(date['year'], date['month']);
 	let daysInMonth = new Date(date['year'], date['month']+1, 0).getDate();
-	let monthData = [];
+	var monthData = [];
 
 	// set monthData to contain dict of keys as dayNum and shifts as values
 	for (let i = 1; i <= daysInMonth; i++) {
 		let day = [];
-		finalMonth.setDate(i)
 		dayOfWeek = finalMonth.getDay();
 
 		// Apply shift value if applicable
@@ -24,10 +24,11 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 			if (shift.daysInWeek[dayOfWeek] && !voidDays.includes(i)) {
 				day.push({
 					'time': shift.time,
-					'length': shift.length,
+					'hours': shift.shiftLength,
 					'numEmp': shift.numEmployees,
 					'req': shift.requirements,
-					'empList': []
+					'empList': [],
+					'date': i
 				});
 			}
 		}
@@ -35,9 +36,53 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 	}
 
 	// get monthData in 3d array [[week1], [week2],...]
-	let monthDataByWeek = getMonthDataByWeek(monthData, (new Date(date['year'], date['month'], 1)).getDay(), daysInMonth);
+	var monthDataByWeek = getMonthDataByWeek(monthData, (new Date(date['year'], date['month'], 1)).getDay(), daysInMonth);
+	// var weekEmpSumList = [];
 	console.log(monthDataByWeek);
 
+
+	/* ------------ Actual assigning emps to shifts ------------ */
+	var day;
+	var shift;
+	var week;
+	var shiftEmpTrialCounter;
+
+	for (let k = 0; k < monthDataByWeek.length; k++) {
+		week = monthDataByWeek[k];
+		for (let i = 0; i < week.length; i++) {
+			day = week[i];
+			if (!day) continue;
+
+			for (let j = 0; j < day.length; j++) {
+				shift = day[j];
+
+				shiftEmpTrialCounter = 0;
+				while (shift.numEmp > shift.empList.length && shiftEmpTrialCounter < shiftTrialMax) {
+					var empToTest;
+					shiftEmpTrialCounter++;
+
+					if (shiftEmpTrialCounter > shiftTrialMax - employees.length) {
+						employee.sort(Employee.sortPercHrsRemain);
+						empToTest = employees(shiftTrialMax - shiftEmpTrialCounter);
+					} else {
+						empToTest = getRandItemInList(employees);
+					}
+
+					if (empToTest.canWork(shift.shiftLength, shift.date)) {
+						shift.empList.push(empToTest.name);
+						empToTest.addShift(shift.shiftLength);
+					} else if (shiftEmpTrialCounter > shiftTrialMax) {
+						shift.empList.push("Failed after: " + shiftEmpTrialCounter + " attempts.");
+					}
+				}
+			}
+			Employee.resetHasWorked(employees);
+		}
+		// var thisWeekEmpSum = [];
+		// for (let i = 0; i < employees.length)
+		Employee.resetAllWeekHours(employees);
+	}
+	console.log(monthDataByWeek);
 
 	/* ------------ generate content ------------ */
 	// set week title for first week
@@ -68,13 +113,26 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 
 		// generate day data
 		for (let j = 0; j < dayData.length; j++) {
-			dayDataNodes.push(shiftNode(dayData[j].time, dayData[j].length, dayData[j].empList));
+			dayDataNodes.push(shiftNode(dayData[j].time, dayData[j].hours, dayData[j].empList));
 		}
 
 		// append day with data
 		outputNode.appendChild(workDayNode(i+1, dayDataNodes));
 	}
 
+}
+
+/**
+* Get a random item from an array.
+*
+* @param {Array<any>}	array	The array to select items from.
+*
+* @return {any}			item	The item chosen from the array.
+*/
+var getRandItemInList = function(array) {
+	if (!Array.isArray(array)) throw Error("getRandItemInList(array) - Parameter must be an array.");
+	if (Array.length === 0) throw Error("getRandItemInList(array) - array must contain at least 1 item");
+	return array[Math.floor(Math.random()*array.length)];
 }
 
 let getMonthDataByWeek = function(monthArray, firstDayOfWeek, daysInMonth) {
@@ -91,7 +149,6 @@ let getMonthDataByWeek = function(monthArray, firstDayOfWeek, daysInMonth) {
 		i++;
 	}
 	monthDataByWeek.push(firstWeek);
-
 
 	// Add rest of monthArray
 	var weekArray = [];
@@ -155,7 +212,7 @@ let round = function (value, precision) {
     return Math.round(value * multiplier) / multiplier;
 }
 
-let shiftNode = function(time, length, employees) {
+let shiftNode = function(time, shiftLength, employees) {
 	let shift = document.createElement('div');
 	shift.classList.add('tab5', 'shift');
 
@@ -166,7 +223,7 @@ let shiftNode = function(time, length, employees) {
 
 	// 'Time:' txt node
 	let timeTxt = document.createElement('div');
-	timeTxt.innerHTML = 'Time: <span style="font-size:60%;color:#000">(' + round(length / 60, 1) +' hrs)</span>'
+	timeTxt.innerHTML = 'Time: <span style="font-size:60%;color:#000">(' + round(shiftLength / 60, 1) +' hrs)</span>'
 	timeNode.appendChild(timeTxt);
 
 	// work times node
@@ -189,10 +246,13 @@ let shiftNode = function(time, length, employees) {
 	// node of actual employees
 	let shiftEmployees = document.createElement('div');
 	shiftEmployees.classList.add('employee-list');
-	let empListTxt = ''
+	var empListTxt = '';
+
 	for (empIndex = 0; empIndex < employees.length; empIndex++) {
-		empListTxt += employees[empIndex].name + '<br/>';
+		if (empIndex != 0) empListTxt += ', ';
+		empListTxt += employees[empIndex];
 	}
+
 	shiftEmployees.innerHTML = empListTxt;
 	empNode.appendChild(shiftEmployees);
 

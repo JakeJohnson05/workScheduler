@@ -7,7 +7,7 @@ class Shift {
 		this._numEmployees = Number(numEmployees);
 		this._days = days;
 		this._requirements = (requirements) ? requirements:null;
-		this._length = Number(endTime) - Number(startTime);
+		this._shiftLength = Number(endTime) - Number(startTime);
 	}
 
 	get time() {
@@ -22,7 +22,7 @@ class Shift {
 	get requirements() {
 		return this._requirements;
 	}
-	get length() {
-		return this._length;
+	get shiftLength() {
+		return this._shiftLength;
 	}
 }

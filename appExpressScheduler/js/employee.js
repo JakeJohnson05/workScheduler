@@ -5,6 +5,7 @@ class Employee {
 		this._empMaxHrs = Number(maxHours);
 		this._empRestr = (restrictions) ? restrictions:[];
 		this._hoursInCurrentWeek = 0;
+		this._hasWorked = false;
 		// this._shifts = {};
 	}
 
@@ -35,6 +36,10 @@ class Employee {
 		return this._empMaxHrs - this._hoursInCurrentWeek;
 	}
 
+	get percWeekHrsRemain () {
+		return this.weekHrsRemain / ((this.hoursThisWeek) ? this.hoursThisWeek:1);
+	}
+
 	addRestrictions(...args) {
 		for (let i = 0; i < args.length; i++) {
 			this._empRestr.push(args[i]);
@@ -43,30 +48,55 @@ class Employee {
 
 	canWork(hrs, date) {
 		let canWork = true;
-		if (this.weekHrsRemain + Number(hrs) < this._empMaxHrs) {
+		if (this.weekHrsRemain + Number(hrs) <= this._empMaxHrs) {
 			canWork = false;
-		} else if (this._restrictions.includes(date)) {
+		} else if (Array.isArray(this._restrictions)
+			&& !this._restrictions.includes(date)){
+			canWork = false;
+		} else if (this.hasWorked) {
 			canWork = false;
 		}
-		return canWork
-
+		return canWork;
 	}
 
-	addWeekHours(hrs) {
+	addShift(hrs) {
 		this._hoursInCurrentWeek += hrs;
+		this._hasWorked = true;
 	}
 
 	resetWeekHours() {
 		this._hoursInCurrentWeek = 0;
 	}
 
-	// deleteAllShifts() {
-	// 	this._shifts = {};
-	// }
+	work() {
+		this._hasWorked = true;
+	}
 
-	// addShift(day, shift) {
-	// 	this._shifts['day'] = shift;
-	// }
+	noWork() {
+		this._hasWorked = false;
+	}
 
+	static resetHasWorked(empList) {
+		for (let i = 0; i < empList.length; i++) {
+			// if (Array.isArray(empList[i])) Employee.resetHasWorked(empList[i]);
+			empList[i].noWork();
+		}
+	}
+
+	static resetAllWeekHours(empList) {
+		for (let i = 0; i < empList.length; i++) {
+			empList[i].resetWeekHours();
+			empList[i].noWork();
+		}
+	}
+
+	/**
+	*	Sorts Employees by porp of hours remaining first, then remaining hours
+	*/
+	static sortPercHrsRemain(empA, empB) {
+		return empA.percWeekHrsRemain - empB.percWeekHrsRemain;
+	}
 
 }
+
+
