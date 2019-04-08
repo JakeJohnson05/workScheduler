@@ -1011,6 +1011,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	text-align: center;
 	font-size: 150%;
 	padding-top: 30px;
+    border-radius: 10px 10px 0 0;
 }
 
 #tab5 .weekdays {
@@ -1035,6 +1036,7 @@ input[type="range"]:active, input[type="range"]:hover {
 	justify-content: center;
 	align-content: start;
 	padding-bottom: 10px;
+	border-radius: 0 0 5px 5px;
 }
 
 #tab5 .day > div:first-child {
