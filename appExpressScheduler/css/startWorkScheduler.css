@@ -953,6 +953,33 @@ input[type="range"]:active, input[type="range"]:hover {
 	border: 1px solid #8883;
 }
 
+#shuffle-ctn {
+	display: grid;
+	width: 100%;
+	justify-content: right;
+}
+
+#shuffle-btn {
+	display: grid;
+	align-items: center;
+	justify-items: center;
+	border-radius: 10px;
+	cursor: pointer;
+	height: 45px;
+	width: 100px;
+	margin: 5px;
+	color: #fff;
+	background-color: #ff5050;
+	opacity: .5;
+	-webkit-transition: opacity .2s;
+	-moz-transition: opacity .2s;
+	transition: opacity .2s;
+}
+
+#shuffle-btn:hover {
+	opacity: 1;
+}
+
 #tab5 .tab-content > .other-month {
 	width: 100%;
 	margin-bottom: 20px;

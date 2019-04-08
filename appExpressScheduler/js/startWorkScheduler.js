@@ -154,7 +154,7 @@ let setUpCurrentTab = function() {
 	}
 }
 
-let consoleData = function(tab) {
+let consoleData = function() {
 	let tabList = document.getElementsByClassName('form-tab');
 	let calendarData = {
 		'date': {},
@@ -304,7 +304,7 @@ let createShiftTimeSlider = function(shift) {
 		step: STEP,
 		start: [540, 1020],
 		connect: true,
-		margin: 90,
+		margin: 60,
 		behaviour: 'tap-drag'
 	});
 
@@ -328,7 +328,7 @@ let prettyPrintTime = function(minutes) {
 	let amORpm = value => hrs < 12 ? 'am':'pm';
 	let hrs12 = (amORpm(hrs) === 'am' ) ? hrs:(hrs-12);
 
-	return `${ hrs12 === 0 ? 12:hrs12 }:${ addZeros(minRemain) } ${ amORpm(hrs) }`
+	return `${ hrs12 === 0 ? 12:hrs12 }:${ addZeros(minRemain) }${ amORpm(hrs) }`
 }
 
 let ChngNumEmp = function(shiftNumNode, direction, max) {
@@ -393,7 +393,7 @@ let generateTab3Cal = function(month, year) {
 
 let loadExampleData = function() {
 	setTab(5);
-// startTime, endTime, numEmployees, days, requirements
+
 	let fakeCalendarData = {
 		'date': {'month': 4, 'year': 2019},
 		'employees': [
@@ -415,7 +415,6 @@ let loadExampleData = function() {
 		],
 		'voidDays': [17, 24, 25, 26, 27],
 	}
-
 
 	generateSchedule(fakeCalendarData['date'], fakeCalendarData['employees'], fakeCalendarData['shifts'], fakeCalendarData['voidDays']);
 }

@@ -1,9 +1,13 @@
-let generateSchedule = function(date, emps, shifts, voidDays) {
-	var employees = emps;
+var lastData;
+let generateSchedule = function(date, employees, shifts, voidDays) {
+	// var employees = emps;
 	var shiftTrialMax = 30;
 	// Update Calendar txt
-	let calendarTitleNode = document.getElementById('final-cal-title');
-	calendarTitleNode.innerHTML = `${ months[date['month']] } - ${ date['year'] }`
+	let calendarTitleCtn = document.getElementById('final-cal-title');
+	while (calendarTitleCtn.lastChild) calendarTitleCtn.removeChild(calendarTitleCtn.lastChild);
+	let calendarTitleNode = document.createElement('div');
+	calendarTitleNode.innerHTML = `${ months[date['month']] } - ${ date['year'] }`;
+	calendarTitleCtn.appendChild(calendarTitleNode);
 
 	let outputNode = document.getElementsByClassName('tab-content tab5')[0];
 	// clear any previous content
@@ -16,6 +20,7 @@ let generateSchedule = function(date, emps, shifts, voidDays) {
 	// set monthData to contain dict of keys as dayNum and shifts as values
 	for (let i = 1; i <= daysInMonth; i++) {
 		let day = [];
+		finalMonth.setDate(i);
 		dayOfWeek = finalMonth.getDay();
 
 		// Apply shift value if applicable
@@ -24,7 +29,7 @@ let generateSchedule = function(date, emps, shifts, voidDays) {
 			if (shift.daysInWeek[dayOfWeek] && !voidDays.includes(i)) {
 				day.push({
 					'time': shift.time,
-					'hours': shift.shiftLength,
+					'totalMins': shift.shiftLength,
 					'numEmp': shift.numEmployees,
 					'req': shift.requirements,
 					'empList': [],
@@ -37,52 +42,63 @@ let generateSchedule = function(date, emps, shifts, voidDays) {
 
 	// get monthData in 3d array [[week1], [week2],...]
 	var monthDataByWeek = getMonthDataByWeek(monthData, (new Date(date['year'], date['month'], 1)).getDay(), daysInMonth);
-	// var weekEmpSumList = [];
-	console.log(monthDataByWeek);
 
 
 	/* ------------ Actual assigning emps to shifts ------------ */
+	var weekEmpSumList = [];
 	var day;
 	var shift;
 	var week;
 	var shiftEmpTrialCounter;
+
 
 	for (let k = 0; k < monthDataByWeek.length; k++) {
 		week = monthDataByWeek[k];
 		for (let i = 0; i < week.length; i++) {
 			day = week[i];
 			if (!day) continue;
+			for (let empIndex = 0; empIndex < employees.length; empIndex++) {
+				employees[empIndex].hasWorked = false;
+			}
 
 			for (let j = 0; j < day.length; j++) {
 				shift = day[j];
 
 				shiftEmpTrialCounter = 0;
-				while (shift.numEmp > shift.empList.length && shiftEmpTrialCounter < shiftTrialMax) {
-					var empToTest;
+				while (shift.numEmp > shift.empList.length) {
 					shiftEmpTrialCounter++;
+					var empToTest = getRandItemInList(employees);
 
-					if (shiftEmpTrialCounter > shiftTrialMax - employees.length) {
-						employee.sort(Employee.sortPercHrsRemain);
-						empToTest = employees(shiftTrialMax - shiftEmpTrialCounter);
-					} else {
-						empToTest = getRandItemInList(employees);
+					if (shiftEmpTrialCounter === shiftTrialMax - employees.length - 1) {
+						console.log(`Warning: shift trial counter cap almost maxed: Week/Day/Shift/Counter: ${k}/${i}/${j}/${shiftEmpTrialCounter}`);
+						employees.sort(Employee.sortPercMinsRemain);
+						empToTest = employees[shiftTrialMax - shiftEmpTrialCounter];
 					}
 
-					if (empToTest.canWork(shift.shiftLength, shift.date)) {
+					if (!empToTest.hasWorked && empToTest.maxMins > (empToTest.minsThisWeek + Number(shift['totalMins']))) {
+						empToTest.hasWorked = true;
+						empToTest.minsThisWeek = Number(shift.totalMins);
 						shift.empList.push(empToTest.name);
-						empToTest.addShift(shift.shiftLength);
-					} else if (shiftEmpTrialCounter > shiftTrialMax) {
+					}
+
+					if (shiftEmpTrialCounter === shiftTrialMax) {
 						shift.empList.push("Failed after: " + shiftEmpTrialCounter + " attempts.");
+						break;
 					}
 				}
 			}
-			Employee.resetHasWorked(employees);
 		}
-		// var thisWeekEmpSum = [];
-		// for (let i = 0; i < employees.length)
-		Employee.resetAllWeekHours(employees);
+
+		var thisWeek = [];
+		for (let i = 0; i < employees.length; i++) {
+			thisWeek.push({
+				'name': employees[i].name,
+				'hours': employees[i].minsThisWeek
+			});
+			employees[i].setMinsThisWeek = 0;
+		}
+		weekEmpSumList.push(thisWeek);
 	}
-	console.log(monthDataByWeek);
 
 	/* ------------ generate content ------------ */
 	// set week title for first week
@@ -113,7 +129,7 @@ let generateSchedule = function(date, emps, shifts, voidDays) {
 
 		// generate day data
 		for (let j = 0; j < dayData.length; j++) {
-			dayDataNodes.push(shiftNode(dayData[j].time, dayData[j].hours, dayData[j].empList));
+			dayDataNodes.push(shiftNode(dayData[j].time, dayData[j].totalMins, dayData[j].empList));
 		}
 
 		// append day with data
@@ -228,7 +244,8 @@ let shiftNode = function(time, shiftLength, employees) {
 
 	// work times node
 	let workTimes = document.createElement('div');
-	workTimes.appendChild(document.createTextNode(`${ prettyPrintTime(time['start']) } - ${ prettyPrintTime(time['end']) }`));
+	workTimes.appendChild(document.createTextNode(`${ prettyPrintTime(time['start']) }
+		- ${ prettyPrintTime(time['end']) }`));
 	workTimes.classList.add('work-times')
 	timeNode.appendChild(workTimes);
 
