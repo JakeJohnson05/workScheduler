@@ -55,10 +55,7 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 		for (let i = 0; i < week.length; i++) {
 			day = week[i];
 			if (!day) continue;
-			for (let empIndex = 0; empIndex < employees.length; empIndex++) {
-				employees[empIndex].hasWorked = false;
-			}
-
+			for (let empIndex = 0; empIndex < employees.length; empIndex++) employees[empIndex].hasWorked = false;
 			for (let j = 0; j < day.length; j++) {
 				shift = day[j];
 
@@ -140,7 +137,6 @@ let generateSchedule = function(date, employees, shifts, voidDays) {
 * Get a random item from an array.
 *
 * @param {Array<any>}	array	The array to select items from.
-*
 * @return {any}			item	The item chosen from the array.
 */
 var getRandItemInList = function(array) {
